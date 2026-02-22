@@ -242,9 +242,9 @@ function initPermissionScreen() {
   list.innerHTML = "";
 
   const currentLang = getLang();
-  const items = [{ id: "markCamera", img: "../AR-NX/img/camera.png", txt: lang[currentLang]["EXP_INFO_CAMERA_TITLE"] }];
+  const items = [{ id: "markCamera", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.0.2/img/camera.png", txt: lang[currentLang]["EXP_INFO_CAMERA_TITLE"] }];
   if (isIOS) {
-    items.push({ id: "markMotion", img: "../AR-NX/img/motion.png", txt: lang[currentLang]["EXP_INFO_MOTION_TITLE"] });
+    items.push({ id: "markMotion", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.0.2/img/motion.png", txt: lang[currentLang]["EXP_INFO_MOTION_TITLE"] });
   }
 
   items.forEach((item) => {
@@ -664,6 +664,7 @@ async function loadEvent(isReadyEnd) {
   hideScreen("motionScreen");
   if (isReadyEnd) {
     hideScreen("permissionScreen");
+    saveUserLog("TRY - AR 로딩시작");
     initAR();
     return;
   }
@@ -869,7 +870,6 @@ function playGiftSequence() {
   const sparkleContainer = document.getElementById("sparkle-lottie");
 
   if (giftAnim) giftAnim.destroy();
-  if (sparkleAnim) sparkleAnim.destroy();
   giftContainer.innerHTML = "";
   sparkleContainer.innerHTML = "";
 
@@ -885,14 +885,7 @@ function playGiftSequence() {
     path: "./lottie/gift_box.json",
   });
 
-  sparkleAnim = lottie.loadAnimation({
-    container: sparkleContainer,
-    renderer: "svg",
-    loop: false,
-    autoplay: false,
-    path: "./lottie/fireworks.json",
-  });
-
+ 
   giftAnim.addEventListener("DOMLoaded", () => {
     giftAnim.playSegments([0, 15], true);
   });
@@ -905,7 +898,8 @@ function playGiftSequence() {
 
     giftContainer.classList.add("hidden");
     sparkleContainer.classList.remove("hidden");
-    sparkleAnim.goToAndPlay(0, true);
+    //sparkleAnim.goToAndPlay(0, true);
+    startTripleSparkles();
   });
 
   giftContainer.onclick = () => {
@@ -923,10 +917,72 @@ function playGiftSequence() {
     }
   };
 
-  sparkleAnim.addEventListener("complete", () => {
-    giftOverlay.classList.add("hidden");
-    giftPlaying = false;
+}
 
+function startTripleSparkles() {
+  const sparkleContainer = document.getElementById("sparkle-lottie");
+
+  sparkleContainer.innerHTML = "";
+  sparkleContainer.style.position = "relative";
+  sparkleContainer.style.overflow = "visible"; // 화면 밖 나가도 OK면
+
+  const anims = [];
+
+  for (let i = 0; i < 3; i++) {
+  const d = document.createElement("div");
+  d.style.position = "absolute";
+  d.style.inset = "0";
+  d.style.pointerEvents = "none";
+  d.style.transformOrigin = "center center";
+
+  if (i === 0) {
+    d.style.transform = "translate(0px, 0px) scale(1.1)";
+  }
+
+  if (i === 1) {
+    d.style.transform = "translate(40px, -70px) scale(1.5)";
+  }
+
+  if (i === 2) {
+    d.style.transform = "translate(-35px, 60px) scale(1.3)";
+  }
+
+  sparkleContainer.appendChild(d);
+
+  const anim = lottie.loadAnimation({
+    container: d,
+    renderer: "svg",
+    loop: false,
+    autoplay: false,
+    path: "./lottie/fireworks.json",
+  });
+
+  anims.push(anim);
+}
+
+  function chain(idx) {
+    if (!anims[idx] || !anims[idx + 1]) return;
+
+    let fired = false;
+
+    anims[idx].addEventListener("enterFrame", (e) => {
+      const total = anims[idx].totalFrames || 0;
+      if (!fired && total > 0 && e.currentTime >= total * 0.5) {
+        fired = true;
+        anims[idx + 1].goToAndPlay(0, true);
+        chain(idx + 1);
+      }
+    });
+  }
+
+  anims[0].addEventListener("DOMLoaded", () => {
+    anims[0].goToAndPlay(0, true);
+    chain(0);
+  });
+
+  anims[2].addEventListener("complete", () => {
+    document.getElementById("giftOverlay").classList.add("hidden");
+    giftPlaying = false;
     openArModal2();
   });
 }
@@ -2108,6 +2164,7 @@ function updateTokenUI(remainCnt, totalCnt, div) {
 
   if (changed || div === "2") {
     saveUserLog("TRY - 토큰 줍기");
+      playGiftSequence();
     requestAnimationFrame(() => animateChange(document.getElementById("remainMini")));
   }
 

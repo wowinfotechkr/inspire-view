@@ -314,9 +314,9 @@ function initPermissionScreen() {
   list.innerHTML = "";
 
   const currentLang = getLang();
-  const items = [{ id: "markCamera", img: "../AR-NX/img/camera.png", txt: lang[currentLang]["EXP_INFO_CAMERA_TITLE"] }];
+  const items = [{ id: "markCamera", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.0.2/img/camera.png", txt: lang[currentLang]["EXP_INFO_CAMERA_TITLE"] }];
   if (isIOS) {
-    items.push({ id: "markMotion", img: "../AR-NX/img/motion.png", txt: lang[currentLang]["EXP_INFO_MOTION_TITLE"] });
+    items.push({ id: "markMotion", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.0.2/img/motion.png", txt: lang[currentLang]["EXP_INFO_MOTION_TITLE"] });
   }
 
   items.forEach((item) => {
@@ -658,6 +658,7 @@ async function loadEvent(isReadyEnd) {
   hideScreen("cameraScreen");
   hideScreen("motionScreen");
   if (isReadyEnd) {
+    saveUserLog("TICKET - AR 로딩시작");
     hideScreen("permissionScreen");
     initAR();
     return;
@@ -1239,12 +1240,14 @@ function checkCouponCreated() {
   }
 }
 
+
 function showCouponAlert() {
   const panel = document.getElementById("resultPanel");
   const title = document.getElementById("resultTitle");
   const message = document.getElementById("resultMessage");
   const video = document.getElementById("bgVideo");
 
+  
   message.innerHTML = `${lang_TICKET_GET_1}<br>${lang_TICKET_GET_2}`;
   panel.classList.remove("win", "lose");
   panel.classList.add("win");
@@ -2414,7 +2417,7 @@ function connectWebSocket() {
 function updateTokenUI(remainCnt, totalCnt, div) {
   const prevEl = document.getElementById("remainMini");
   const prevValueNum = prevEl ? Number(prevEl.textContent) : NaN;
-  console.log("remainCnt 확인", remainCnt);
+
   const hasPrev = Number.isFinite(prevValueNum);
   const remainNum = Number(remainCnt);
 
