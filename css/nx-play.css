@@ -1812,7 +1812,7 @@ body.no-scroll {
   border-radius: 50%;
   background-color: #f2d8ab;
   border: 3px solid #fff;
-  background-image: url("/img/check-mark.svg");
+  background-image: url("../img/check-mark.svg");
   background-repeat: no-repeat;
   background-position: center;
   background-size: 35px 35px;
@@ -1937,7 +1937,7 @@ body.no-scroll {
   background-repeat: no-repeat;
   background-position: center;
   background-size: 70px 70px;
-  background-image: url("/img/info-icon.svg");
+  background-image: url("../img/info-icon.svg");
   pointer-events: none;
   z-index: 2;
 }
