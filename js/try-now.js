@@ -2164,7 +2164,7 @@ function updateTokenUI(remainCnt, totalCnt, div) {
 
   if (changed || div === "2") {
     saveUserLog("TRY - 토큰 줍기");
-      playGiftSequence();
+      //playGiftSequence();
     requestAnimationFrame(() => animateChange(document.getElementById("remainMini")));
   }
 
