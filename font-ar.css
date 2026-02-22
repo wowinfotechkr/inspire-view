@@ -1,0 +1,111 @@
+/* Thin - 100 */
+@font-face {
+  font-family: 'Paperlogy';
+  src: url('../fonts/Paperlogy-1Thin.woff2') format('woff2');
+  font-weight: 100;
+  font-style: normal;
+}
+
+/* ExtraLight - 200 */
+@font-face {
+  font-family: 'Paperlogy';
+  src: url('../fonts/Paperlogy-2ExtraLight.woff2') format('woff2');
+  font-weight: 200;
+  font-style: normal;
+}
+
+/* Light - 300 */
+@font-face {
+  font-family: 'Paperlogy';
+  src: url('../fonts/Paperlogy-3Light.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+}
+
+/* Regular - 400 */
+@font-face {
+  font-family: 'Paperlogy';
+  src: url('../fonts/Paperlogy-4Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* Medium - 500 */
+@font-face {
+  font-family: 'Paperlogy';
+  src: url('../fonts/Paperlogy-5Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+}
+
+/* SemiBold - 600 */
+@font-face {
+  font-family: 'Paperlogy';
+  src: url('../fonts/Paperlogy-6SemiBold.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+}
+
+/* Bold - 700 */
+@font-face {
+  font-family: 'Paperlogy';
+  src: url('../fonts/Paperlogy-7Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+}
+
+/* ExtraBold - 800 */
+@font-face {
+  font-family: 'Paperlogy';
+  src: url('../fonts/Paperlogy-8ExtraBold.woff2') format('woff2');
+  font-weight: 800;
+  font-style: normal;
+}
+
+/* Black - 900 */
+@font-face {
+  font-family: 'Paperlogy';
+  src: url('../fonts/Paperlogy-9Black.woff2') format('woff2');
+  font-weight: 900;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'LINESeedSansTH';
+  src: url('../fonts/LINESeedSansTH_W_Th.woff2') format('woff2'),
+       url('../fonts/LINESeedSansTH_W_Th.woff') format('woff');
+  font-weight: 100; /* Thin */
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'LINESeedSansTH';
+  src: url('../fonts/LINESeedSansTH_W_Rg.woff2') format('woff2'),
+       url('../fonts/LINESeedSansTH_W_Rg.woff') format('woff');
+  font-weight: 400; /* Regular */
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'LINESeedSansTH';
+  src: url('../fonts/LINESeedSansTH_W_He.woff2') format('woff2'),
+       url('../fonts/LINESeedSansTH_W_He.woff') format('woff');
+  font-weight: 500; /* Heavy or Medium */
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'LINESeedSansTH';
+  src: url('../fonts/LINESeedSansTH_W_Bd.woff2') format('woff2'),
+       url('../fonts/LINESeedSansTH_W_Bd.woff') format('woff');
+  font-weight: 700; /* Bold */
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'LINESeedSansTH';
+  src: url('../fonts/LINESeedSansTH_W_XBd.woff2') format('woff2'),
+       url('../fonts/LINESeedSansTH_W_XBd.woff') format('woff');
+  font-weight: 900; /* Extra Bold / Black */
+  font-style: normal;
+}
