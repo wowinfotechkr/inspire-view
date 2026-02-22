@@ -133,8 +133,8 @@ function getLang() {
   if (!SUPPORTED_LANGS.includes(urlLang)) {
     const fallback = getLang();
     const u = new URL(location.href);
-    u.searchParams.set("lang", fallback);
-    if (u.toString() !== location.href) location.replace(u.toString());
+    //u.searchParams.set("lang", fallback);
+    //if (u.toString() !== location.href) location.replace(u.toString());
   }
 })();
 
