@@ -242,9 +242,9 @@ function initPermissionScreen() {
   list.innerHTML = "";
 
   const currentLang = getLang();
-  const items = [{ id: "markCamera", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.0.7/img/camera.png", txt: lang[currentLang]["EXP_INFO_CAMERA_TITLE"] }];
+  const items = [{ id: "markCamera", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.0.8/img/camera.png", txt: lang[currentLang]["EXP_INFO_CAMERA_TITLE"] }];
   if (isIOS) {
-    items.push({ id: "markMotion", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.0.7/img/motion.png", txt: lang[currentLang]["EXP_INFO_MOTION_TITLE"] });
+    items.push({ id: "markMotion", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.0.8/img/motion.png", txt: lang[currentLang]["EXP_INFO_MOTION_TITLE"] });
   }
 
   items.forEach((item) => {

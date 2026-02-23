@@ -716,11 +716,11 @@ function initPermissionScreen() {
 
   const currentLang = getLang();
   const items = [
-    { id: "markGeo", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.0.7/img/location.png", txt: lang[currentLang]["PERM_ITEM_LOCATION"] },
-    { id: "markCamera", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.0.7/img/camera.png", txt: lang[currentLang]["PERM_ITEM_CAMERA"] },
+    { id: "markGeo", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.0.8/img/location.png", txt: lang[currentLang]["PERM_ITEM_LOCATION"] },
+    { id: "markCamera", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.0.8/img/camera.png", txt: lang[currentLang]["PERM_ITEM_CAMERA"] },
   ];
   if (isIOS) {
-    items.push({ id: "markMotion", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.0.7/img/motion.png", txt: lang[currentLang]["PERM_ITEM_MOTION"] });
+    items.push({ id: "markMotion", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.0.8/img/motion.png", txt: lang[currentLang]["PERM_ITEM_MOTION"] });
   }
 
   items.forEach((item) => {
@@ -1221,8 +1221,11 @@ async function loadEvent(isReadyEnd) {
     console.log(e);
   }
 
+  const response = await fetch("/getGoogleMapsKey.do");
+  const apiKey = await response.text();
+   
   const script = document.createElement("script");
-  script.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyD7xdgVF-arS3VGLssfTtnI5DcPCqdrHSw&callback=onGoogleMapsLoaded&loading=async";
+  script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=onGoogleMapsLoaded&loading=async`;
   script.async = true;
   script.defer = true;
   document.head.appendChild(script);
