@@ -562,8 +562,15 @@ function setAuthModalText(type) {
   el_p4.style.display = el_p4.innerHTML ? "" : "none";
 }
 
-async function requestCamera() {
+async function requestCamera(isAuto) {
   if (isRequesting) return;
+  
+  if (isAuto) {
+    saveUserLog("TRY - 카메라권한 버튼 클릭(자동)");
+  } else {
+    saveUserLog("TRY - 카메라권한 버튼 클릭");
+  }
+  
   showPermissionLoader();
   isRequesting = true;
 
@@ -580,6 +587,7 @@ async function requestCamera() {
       document.getElementById("btn-next").innerText = `${lang_EXP_BTN}`;
       loadEvent(true);
     }
+    saveUserLog("TRY - 카메라권한 허용");
   } catch (err) {
     camOK = false;
     camDenied = true;
@@ -587,10 +595,10 @@ async function requestCamera() {
     setFail("mark-camera");
     showBottomNotice(`${lang_RETRY_REQ}`);
     console.error(err);
+    saveUserLog("TRY - 카메라권한 거부");
   } finally {
     isRequesting = false;
-    await updatePermissionUI();
-    saveUserLog("TRY - 카메라권한 버튼 클릭");
+    await updatePermissionUI();    
     hidePermissionLoader();
   }
 }
