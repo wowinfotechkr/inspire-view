@@ -242,9 +242,9 @@ function initPermissionScreen() {
   list.innerHTML = "";
 
   const currentLang = getLang();
-  const items = [{ id: "markCamera", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.0.8/img/camera.png", txt: lang[currentLang]["EXP_INFO_CAMERA_TITLE"] }];
+  const items = [{ id: "markCamera", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.0.9/img/camera.png", txt: lang[currentLang]["EXP_INFO_CAMERA_TITLE"] }];
   if (isIOS) {
-    items.push({ id: "markMotion", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.0.8/img/motion.png", txt: lang[currentLang]["EXP_INFO_MOTION_TITLE"] });
+    items.push({ id: "markMotion", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.0.9/img/motion.png", txt: lang[currentLang]["EXP_INFO_MOTION_TITLE"] });
   }
 
   items.forEach((item) => {
@@ -260,11 +260,11 @@ function initPermissionScreen() {
                 `;
     list.appendChild(li);
   });
- if (camOK) {
+  if (camOK) {
     document.getElementById("markCamera")?.classList.remove("icon-grayscale");
     document.getElementById("markCameraOK")?.classList.remove("hidden");
   }
-  
+
   document.getElementById("arWarningText").innerText = lang[currentLang]["PROMOTION_AR_WARNING"];
 
   const browserName = isIOS ? "Safari" : "Chrome";
@@ -319,14 +319,14 @@ function setSuccess(id) {
   el.classList.remove("fail");
   el.classList.add("success");
 
-  if(id=="mark-camera"){
-  	id="markCamera"
-  }else if(id=="mark-motion"){
-    id="markMotion"
+  if (id == "mark-camera") {
+    id = "markCamera";
+  } else if (id == "mark-motion") {
+    id = "markMotion";
   }
 
   const el2 = document.getElementById(toCamelCase(id));
-  var id2 = id+"OK";
+  var id2 = id + "OK";
   const el3 = document.getElementById(toCamelCase(id2));
   if (el2) {
     el3.classList.remove("hidden");
@@ -389,7 +389,7 @@ async function queryPermissionState(name) {
 async function updatePermissionUI() {
   const nm = needsMotion();
   document.getElementById("row-motion").style.display = nm ? "flex" : "none";
-	console.log("camOK",camOK);
+  console.log("camOK", camOK);
   if (camOK) setSuccess("mark-camera");
   else if (camDenied) setFail("mark-camera");
   else clearMark("mark-camera");
@@ -432,8 +432,8 @@ async function initPermissionFlow() {
   if (camOK && (needsMotion() ? motionGranted : true)) {
     fMaxProgress = 100;
     setTimeout(function () {
-    	document.getElementById("blankOverlay").style.display = "none";
-	}, 700);
+      document.getElementById("blankOverlay").style.display = "none";
+    }, 700);
     loadEvent(true);
   } else {
     showScreen("permissionScreen");
@@ -564,13 +564,13 @@ function setAuthModalText(type) {
 
 async function requestCamera(isAuto) {
   if (isRequesting) return;
-  
+
   if (isAuto) {
     saveUserLog("TRY - 카메라권한 버튼 클릭(자동)");
   } else {
     saveUserLog("TRY - 카메라권한 버튼 클릭");
   }
-  
+
   showPermissionLoader();
   isRequesting = true;
 
@@ -598,7 +598,7 @@ async function requestCamera(isAuto) {
     saveUserLog("TRY - 카메라권한 거부");
   } finally {
     isRequesting = false;
-    await updatePermissionUI();    
+    await updatePermissionUI();
     hidePermissionLoader();
   }
 }
@@ -655,6 +655,7 @@ function showBottomNotice(text) {
   hidePermissionLoader();
 
   document.getElementById("arNotice").style.display = "none";
+  document.getElementById("cameraNoticeText").style.display = "none";
 }
 
 function hideBottomNotice() {
@@ -893,7 +894,6 @@ function playGiftSequence() {
     path: "./lottie/gift_box.json",
   });
 
- 
   giftAnim.addEventListener("DOMLoaded", () => {
     giftAnim.playSegments([0, 15], true);
   });
@@ -924,7 +924,6 @@ function playGiftSequence() {
       sound.play().catch((e) => console.log("Sound play failed", e));
     }
   };
-
 }
 
 function startTripleSparkles() {
@@ -937,36 +936,36 @@ function startTripleSparkles() {
   const anims = [];
 
   for (let i = 0; i < 3; i++) {
-  const d = document.createElement("div");
-  d.style.position = "absolute";
-  d.style.inset = "0";
-  d.style.pointerEvents = "none";
-  d.style.transformOrigin = "center center";
+    const d = document.createElement("div");
+    d.style.position = "absolute";
+    d.style.inset = "0";
+    d.style.pointerEvents = "none";
+    d.style.transformOrigin = "center center";
 
-  if (i === 0) {
-    d.style.transform = "translate(0px, 0px) scale(1.1)";
+    if (i === 0) {
+      d.style.transform = "translate(0px, 0px) scale(1.1)";
+    }
+
+    if (i === 1) {
+      d.style.transform = "translate(40px, -70px) scale(1.5)";
+    }
+
+    if (i === 2) {
+      d.style.transform = "translate(-35px, 60px) scale(1.3)";
+    }
+
+    sparkleContainer.appendChild(d);
+
+    const anim = lottie.loadAnimation({
+      container: d,
+      renderer: "svg",
+      loop: false,
+      autoplay: false,
+      path: "./lottie/fireworks.json",
+    });
+
+    anims.push(anim);
   }
-
-  if (i === 1) {
-    d.style.transform = "translate(40px, -70px) scale(1.5)";
-  }
-
-  if (i === 2) {
-    d.style.transform = "translate(-35px, 60px) scale(1.3)";
-  }
-
-  sparkleContainer.appendChild(d);
-
-  const anim = lottie.loadAnimation({
-    container: d,
-    renderer: "svg",
-    loop: false,
-    autoplay: false,
-    path: "./lottie/fireworks.json",
-  });
-
-  anims.push(anim);
-}
 
   function chain(idx) {
     if (!anims[idx] || !anims[idx + 1]) return;
@@ -1393,7 +1392,7 @@ async function startPortalLottie() {
   } else {
     if (!portalAnimLoaded) {
       portalAnimLoaded = true;
-      await loadScript("https://unpkg.com/lottie-web/build/player/lottie.min.js");
+      //await loadScript("https://unpkg.com/lottie-web/build/player/lottie.min.js");
     } else {
       return;
     }
@@ -2172,7 +2171,7 @@ function updateTokenUI(remainCnt, totalCnt, div) {
 
   if (changed || div === "2") {
     saveUserLog("TRY - 토큰 줍기");
-      //playGiftSequence();
+    //playGiftSequence();
     requestAnimationFrame(() => animateChange(document.getElementById("remainMini")));
   }
 
