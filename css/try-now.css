@@ -1868,6 +1868,51 @@ body.no-scroll {
   /* A even darker shade for active/click state */
 }
 
+.shine-effect {
+  position: relative;
+  overflow: hidden;
+}
+
+.shine-effect::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  /* 시작 위치를 더 멀리 잡아서 천천히 들어오게 함 */
+  left: -200%; 
+  width: 100%; /* 빛줄기를 넓게 퍼뜨려야 휙 지나가는 느낌이 줄어듦 */
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3), /* 빛 농도를 살짝 낮춤 */
+    transparent
+  );
+  transform: skewX(-20deg);
+  
+  /* 총 6초 주기 / 부드러운 가감속(cubic-bezier) 적용 */
+  animation: shine-graceful 6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+@keyframes shine-graceful {
+  0% {
+    left: -200%;
+  }
+  /* 0%에서 60%까지 아주 천천히(3.6초 동안) 이동 */
+  80% {
+    left: 200%;
+  }
+  /* 나머지 40% 시간 동안은 완전히 사라져서 대기 */
+  100% {
+    left: 200%;
+  }
+}
+
+#cameraNoticeText {
+  color: #1976d2;
+  font-weight: 600;
+  padding: 4px;
+}
+
 .common-popup2 .swal2-actions.split-actions .btn-yes {
   border-right: 1px solid #e5e7eb !important;
   border-radius: 0 0 0 16px !important;
@@ -2623,7 +2668,7 @@ body.no-scroll {
   left: 0;
   right: 0;
   bottom: 12px;
-  padding: 0px 44px 10px 44px;
+  padding: 0px 24px 0px 24px;
 
   display: flex;
   flex-direction: column; /* ⭐ 핵심 */
@@ -2871,7 +2916,6 @@ body.modal-open {
 #guideInfoBtnDiv.blue-rounded-button {
   width: 100%;
   height: 56px;
-  margin-bottom: 6px;
   border-radius: 16px;
 }
 
@@ -3555,13 +3599,13 @@ body.lang-en .inapp-warning {
   transform: scale(2.2);
 }
 
-.perm-icon-wrap{
+.perm-icon-wrap {
   position: relative;
   display: inline-block;
   margin-right: 15px;
 }
 
-.perm-ok{
+.perm-ok {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -3579,6 +3623,6 @@ body.lang-en .inapp-warning {
   line-height: 1;
 }
 
-.hidden{
+.hidden {
   display: none;
 }
