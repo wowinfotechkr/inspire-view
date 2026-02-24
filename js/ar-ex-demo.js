@@ -274,9 +274,9 @@ function initPermissionScreen() {
   list.innerHTML = "";
 
   const currentLang = getLang();
-  const items = [{ id: "markCamera", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.3/img/camera.png", txt: lang[currentLang]["EXP_INFO_CAMERA_TITLE"] }];
+  const items = [{ id: "markCamera", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.5/img/camera.png", txt: lang[currentLang]["EXP_INFO_CAMERA_TITLE"] }];
   if (isIOS) {
-    items.push({ id: "markMotion", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.3/img/motion.png", txt: lang[currentLang]["EXP_INFO_MOTION_TITLE"] });
+    items.push({ id: "markMotion", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.5/img/motion.png", txt: lang[currentLang]["EXP_INFO_MOTION_TITLE"] });
   }
 
   items.forEach((item) => {
@@ -1018,8 +1018,138 @@ function setMealSumList(list, isAni) {
   }
 }
 
+
+function playGiftSequence() {
+  giftPlaying = false;
+
+  var giftOverlay = document.getElementById("giftOverlay");
+  const giftContainer = document.getElementById("gift-lottie");
+  const sparkleContainer = document.getElementById("sparkle-lottie");
+
+  if (giftAnim) giftAnim.destroy();
+  giftContainer.innerHTML = "";
+  sparkleContainer.innerHTML = "";
+
+  giftOverlay.classList.remove("hidden");
+  giftContainer.classList.remove("hidden");
+  sparkleContainer.classList.add("hidden");
+
+  giftAnim = lottie.loadAnimation({
+    container: giftContainer,
+    renderer: "svg",
+    loop: false,
+    autoplay: false,
+    path: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.5/lottie/gift_box.json",
+  });
+
+ 
+  giftAnim.addEventListener("DOMLoaded", () => {
+    giftAnim.playSegments([0, 15], true);
+  });
+
+  giftAnim.addEventListener("complete", () => {
+    if (!giftPlaying) {
+      giftAnim.playSegments([0, 15], true);
+      return;
+    }
+
+    giftContainer.classList.add("hidden");
+    sparkleContainer.classList.remove("hidden");
+    //sparkleAnim.goToAndPlay(0, true);
+    startTripleSparkles();
+  });
+
+  giftContainer.onclick = () => {
+    if (giftPlaying) return;
+    giftPlaying = true;
+    giftAnim.setSpeed(2);
+    giftAnim.loop = false;
+    giftAnim.playSegments([15, 30], true);
+    saveUserLog("TRY - 선물상자 클릭");
+
+    const sound = document.getElementById("gift-sound");
+    if (sound) {
+      sound.currentTime = 0; // 사운드가 씹히지 않게 초기화 후 재생
+      sound.play().catch((e) => console.log("Sound play failed", e));
+    }
+  };
+
+}
+
+function startTripleSparkles() {
+  const sparkleContainer = document.getElementById("sparkle-lottie");
+
+  sparkleContainer.innerHTML = "";
+  sparkleContainer.style.position = "relative";
+  sparkleContainer.style.overflow = "visible"; 
+
+  const anims = [];
+
+  for (let i = 0; i < 3; i++) {
+  const d = document.createElement("div");
+  d.style.position = "absolute";
+  d.style.inset = "0";
+  d.style.pointerEvents = "none";
+  d.style.transformOrigin = "center center";
+
+  if (i === 0) {
+    d.style.transform = "translate(0px, 0px) scale(1.1)";
+  }
+
+  if (i === 1) {
+    d.style.transform = "translate(40px, -70px) scale(1.5)";
+  }
+
+  if (i === 2) {
+    d.style.transform = "translate(-35px, 60px) scale(1.3)";
+  }
+
+  sparkleContainer.appendChild(d);
+
+  const anim = lottie.loadAnimation({
+    container: d,
+    renderer: "svg",
+    loop: false,
+    autoplay: false,
+    path: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.5/lottie/fireworks.json",
+  });
+
+  anims.push(anim);
+}
+
+  function chain(idx) {
+    if (!anims[idx] || !anims[idx + 1]) return;
+
+    let fired = false;
+
+    anims[idx].addEventListener("enterFrame", (e) => {
+      const total = anims[idx].totalFrames || 0;
+      if (!fired && total > 0 && e.currentTime >= total * 0.5) {
+        fired = true;
+        anims[idx + 1].goToAndPlay(0, true);
+        chain(idx + 1);
+      }
+    });
+  }
+
+  anims[0].addEventListener("DOMLoaded", () => {
+    anims[0].goToAndPlay(0, true);
+    chain(0);
+  });
+
+  anims[2].addEventListener("complete", () => {
+    document.getElementById("giftOverlay").classList.add("hidden");
+    giftPlaying = false;
+    openArModal2();
+  });
+}
+
 function openArModal2() {
   saveUserLog("DEMO - 모두 획득");
+  var giftContainer = document.getElementById("gift-lottie");
+  var sparkleContainer = document.getElementById("sparkle-lottie");
+  giftContainer.classList.add("hidden");
+  sparkleContainer.classList.add("hidden");
   const modal2 = document.getElementById("arModal2");
   modal2.classList.remove("hidden");
   modal2.style.opacity = "1";
@@ -1180,7 +1310,7 @@ function showCouponAlert() {
   const panel = document.getElementById("resultPanel");
   const title = document.getElementById("resultTitle");
   const message = document.getElementById("resultMessage");
-  const video = document.getElementById("bgVideo");
+  //const video = document.getElementById("bgVideo");
 
   message.innerHTML = `${lang_TICKET_GET_1}<br>${lang_TICKET_GET_2}`;
   panel.classList.remove("win", "lose");
@@ -1193,8 +1323,8 @@ function showCouponAlert() {
 
   panel.style.display = "block";
   document.getElementById("overlay").classList.add("show");
-  video.currentTime = 0;
-  video.play().catch((err) => console.warn("재생 실패:", err));
+  //video.currentTime = 0;
+  //video.play().catch((err) => console.warn("재생 실패:", err));
   showResultSingleButton();
   panel.classList.add("show");
 }
@@ -1488,7 +1618,7 @@ async function startPortalLottie() {
     renderer: "svg",
     loop: false,
     autoplay: true,
-    path: "/AR/lottie/portal_ntokozo.json",
+    path: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.5/lottie/portal_ntokozo.json",
   });
 }
 
@@ -1884,7 +2014,7 @@ function buildImgListForMeals(imgs, mealCount) {
 }
 
 async function getMealsForSpawn() {
-  const imgs = ["../AR-EX/img/token/coin_buddha_statue.png", "../AR-EX/img/token/coin_gold_bar.png", "../AR-EX/img/token/coin_money_1.png", "../AR-EX/img/token/jewel_diamond.png", "../AR-EX/img/token/people_girl_1.png", "../AR-EX/img/token/people_girl_2.png", "../AR-EX/img/token/people_girl_3.png", "../AR-EX/img/token/people_girl_4.png", "../AR-EX/img/token/people_girl_5.png", "../AR-EX/img/token/people_man_1.png", "../AR-EX/img/token/people_man_2.png", "../AR-EX/img/token/people_man_3.png", "../AR-EX/img/token/cosmetics_cream.png", "../AR-EX/img/token/cosmetics_lipstick.png", "../AR-EX/img/token/item_flower.png", "../AR-EX/img/token/car_1.png", "../AR-EX/img/token/item_skeleton.png", "../AR-EX/img/token/drink_americano.png", "../AR-EX/img/token/drink_beer.png", "../AR-EX/img/token/drink_chamisul.png", "../AR-EX/img/token/drink_champagne.png", "../AR-EX/img/token/drink_cocktail_1.png", "../AR-EX/img/token/drink_cocktail_2.png", "../AR-EX/img/token/drink_whiskey.png", "../AR-EX/img/token/drink_wine.png", "../AR-EX/img/token/food_hotdog.png", "../AR-EX/img/token/food_kimbap.png", "../AR-EX/img/token/food_macaron.png", "../AR-EX/img/token/JP_sushi.png", "../AR-EX/img/token/food_watermelon.png", "../AR-EX/img/token/ID_barong_mask.png", "../AR-EX/img/token/ID_garuda.png", "../AR-EX/img/token/IN_elephant.png", "../AR-EX/img/token/IN_lionstatue.png", "../AR-EX/img/token/TH_buddha_statue.png", "../AR-EX/img/token/TH_dragon_sculpture.png", "../AR-EX/img/token/US_route66.png", "../AR-EX/img/token/US_statue_of_liberty.png", "../AR-EX/img/token/VN_conicalhat.png"];
+  const imgs = ["https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.5/img/token/coin_buddha_statue.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.5/img/token/coin_gold_bar.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.5/img/token/coin_money_1.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.5/img/token/jewel_diamond.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.5/img/token/people_girl_1.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.5/img/token/people_girl_2.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.5/img/token/people_girl_3.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.5/img/token/people_girl_4.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.5/img/token/people_girl_5.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.5/img/token/people_man_1.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.5/img/token/people_man_2.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.5/img/token/people_man_3.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.5/img/token/cosmetics_cream.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.5/img/token/cosmetics_lipstick.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.5/img/token/item_flower.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.5/img/token/car_1.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.5/img/token/item_skeleton.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.5/img/token/drink_americano.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.5/img/token/drink_beer.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.5/img/token/drink_chamisul.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.5/img/token/drink_champagne.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.5/img/token/drink_cocktail_1.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.5/img/token/drink_cocktail_2.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.5/img/token/drink_whiskey.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.5/img/token/drink_wine.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.5/img/token/food_hotdog.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.5/img/token/food_kimbap.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.5/img/token/food_macaron.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.5/img/token/JP_sushi.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.5/img/token/food_watermelon.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.5/img/token/ID_barong_mask.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.5/img/token/ID_garuda.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.5/img/token/IN_elephant.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.5/img/token/IN_lionstatue.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.5/img/token/TH_buddha_statue.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.5/img/token/TH_dragon_sculpture.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.5/img/token/US_route66.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.5/img/token/US_statue_of_liberty.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.5/img/token/VN_conicalhat.png"];
 
   if (!USE_MOCK_MEAL) {
     const mealCount = WANT_TOKEN_COUNT;
@@ -2043,14 +2173,14 @@ function closeCouponPopup() {
   document.getElementById("resultTitle").classList.remove("animate-text", "boom-effect");
   document.getElementById("overlay").classList.remove("show");
   const overlay = document.getElementById("overlay");
-  const video = document.getElementById("bgVideo");
+  //const video = document.getElementById("bgVideo");
 
   overlay.classList.remove("show");
 
-  if (video) {
-    video.pause();
-    video.currentTime = 0;
-  }
+  //if (video) {
+  //  video.pause();
+  //  video.currentTime = 0;
+  //}
 
   document.getElementById("resultPanel").style.display = "none";
   scanningPaused = false;
@@ -2235,7 +2365,8 @@ function updateTokenUI(remainCnt, totalCnt, div) {
     requestAnimationFrame(() => animateChange(document.getElementById("remainMini")));
   }
 
-  if (remainCnt == 0) openArModal2();
+  //if (remainCnt == 0) openArModal2();
+  if (remainCnt == 0) playGiftSequence(() => openArModal2());
 }
 
 function animateChange(el) {

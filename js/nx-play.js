@@ -274,7 +274,8 @@ function createNXTokenEntity(token) {
             console.log(`${lang_COUPON_ISSUED}`);
             if (!user_demo) {
               checkCoupon();
-              showCouponAlert();
+              //showCouponAlert();
+              playGiftSequence(() => showCouponAlert());
             } else {
               showDemoAlert();
             }
@@ -716,11 +717,11 @@ function initPermissionScreen() {
 
   const currentLang = getLang();
   const items = [
-    { id: "markGeo", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.3/img/location.png", txt: lang[currentLang]["PERM_ITEM_LOCATION"] },
-    { id: "markCamera", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.3/img/camera.png", txt: lang[currentLang]["PERM_ITEM_CAMERA"] },
+    { id: "markGeo", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.5/img/location.png", txt: lang[currentLang]["PERM_ITEM_LOCATION"] },
+    { id: "markCamera", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.5/img/camera.png", txt: lang[currentLang]["PERM_ITEM_CAMERA"] },
   ];
   if (isIOS) {
-    items.push({ id: "markMotion", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.3/img/motion.png", txt: lang[currentLang]["PERM_ITEM_MOTION"] });
+    items.push({ id: "markMotion", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.5/img/motion.png", txt: lang[currentLang]["PERM_ITEM_MOTION"] });
   }
 
   items.forEach((item) => {
@@ -1993,15 +1994,15 @@ function closeCouponPopup() {
   document.getElementById("resultPanel").classList.remove("show");
   document.getElementById("resultTitle").classList.remove("animate-text", "boom-effect");
   document.getElementById("overlay").classList.remove("show");
-  const overlay = document.getElementById("overlay");
-  const video = document.getElementById("bgVideo");
+  //const overlay = document.getElementById("overlay");
+  //const video = document.getElementById("bgVideo");
 
-  overlay.classList.remove("show");
+  //overlay.classList.remove("show");
 
-  if (video) {
-    video.pause();
-    video.currentTime = 0; // 항상 처음으로 리셋
-  }
+  //if (video) {
+  //  video.pause();
+  //  video.currentTime = 0; // 항상 처음으로 리셋
+  //}
 
   document.getElementById("resultPanel").style.display = "none";
   scanningPaused = false;
@@ -2707,7 +2708,7 @@ function startPortalLottie() {
     renderer: "svg",
     loop: false, // 🔁 필요에 따라 true/false
     autoplay: true, // 페이지 진입 시 자동재생
-    path: "/AR/lottie/portal_ntokozo.json",
+    path: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.5/lottie/portal_ntokozo.json",
   });
 }
 
@@ -3147,12 +3148,142 @@ function checkCouponCreated() {
   }
 }
 
+function playGiftSequence() {
+  giftPlaying = false;
+
+  var giftOverlay = document.getElementById("giftOverlay");
+  const giftContainer = document.getElementById("gift-lottie");
+  const sparkleContainer = document.getElementById("sparkle-lottie");
+
+  if (giftAnim) giftAnim.destroy();
+  giftContainer.innerHTML = "";
+  sparkleContainer.innerHTML = "";
+
+  giftOverlay.classList.remove("hidden");
+  giftContainer.classList.remove("hidden");
+  sparkleContainer.classList.add("hidden");
+
+  giftAnim = lottie.loadAnimation({
+    container: giftContainer,
+    renderer: "svg",
+    loop: false,
+    autoplay: false,
+    path: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.5/lottie/gift_box.json",
+  });
+
+ 
+  giftAnim.addEventListener("DOMLoaded", () => {
+    giftAnim.playSegments([0, 15], true);
+  });
+
+  giftAnim.addEventListener("complete", () => {
+    if (!giftPlaying) {
+      giftAnim.playSegments([0, 15], true);
+      return;
+    }
+
+    giftContainer.classList.add("hidden");
+    sparkleContainer.classList.remove("hidden");
+    //sparkleAnim.goToAndPlay(0, true);
+    startTripleSparkles();
+  });
+
+  giftContainer.onclick = () => {
+    if (giftPlaying) return;
+    giftPlaying = true;
+    giftAnim.setSpeed(2);
+    giftAnim.loop = false;
+    giftAnim.playSegments([15, 30], true);
+    saveUserLog("TRY - 선물상자 클릭");
+
+    const sound = document.getElementById("gift-sound");
+    if (sound) {
+      sound.currentTime = 0; // 사운드가 씹히지 않게 초기화 후 재생
+      sound.play().catch((e) => console.log("Sound play failed", e));
+    }
+  };
+
+}
+
+function startTripleSparkles() {
+  const sparkleContainer = document.getElementById("sparkle-lottie");
+
+  sparkleContainer.innerHTML = "";
+  sparkleContainer.style.position = "relative";
+  sparkleContainer.style.overflow = "visible"; 
+
+  const anims = [];
+
+  for (let i = 0; i < 3; i++) {
+  const d = document.createElement("div");
+  d.style.position = "absolute";
+  d.style.inset = "0";
+  d.style.pointerEvents = "none";
+  d.style.transformOrigin = "center center";
+
+  if (i === 0) {
+    d.style.transform = "translate(0px, 0px) scale(1.1)";
+  }
+
+  if (i === 1) {
+    d.style.transform = "translate(40px, -70px) scale(1.5)";
+  }
+
+  if (i === 2) {
+    d.style.transform = "translate(-35px, 60px) scale(1.3)";
+  }
+
+  sparkleContainer.appendChild(d);
+
+  const anim = lottie.loadAnimation({
+    container: d,
+    renderer: "svg",
+    loop: false,
+    autoplay: false,
+    path: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.5/lottie/fireworks.json",
+  });
+
+  anims.push(anim);
+}
+
+  function chain(idx) {
+    if (!anims[idx] || !anims[idx + 1]) return;
+
+    let fired = false;
+
+    anims[idx].addEventListener("enterFrame", (e) => {
+      const total = anims[idx].totalFrames || 0;
+      if (!fired && total > 0 && e.currentTime >= total * 0.5) {
+        fired = true;
+        anims[idx + 1].goToAndPlay(0, true);
+        chain(idx + 1);
+      }
+    });
+  }
+
+  anims[0].addEventListener("DOMLoaded", () => {
+    anims[0].goToAndPlay(0, true);
+    chain(0);
+  });
+
+  anims[2].addEventListener("complete", () => {
+    document.getElementById("giftOverlay").classList.add("hidden");
+    giftPlaying = false;
+    showCouponAlert();
+  });
+}
+
 function showCouponAlert() {
   const panel = document.getElementById("resultPanel");
   const title = document.getElementById("resultTitle");
   const message = document.getElementById("resultMessage");
-  const video = document.getElementById("bgVideo");
-
+  //const video = document.getElementById("bgVideo");
+  
+  var giftContainer = document.getElementById("gift-lottie");
+  var sparkleContainer = document.getElementById("sparkle-lottie");
+  giftContainer.classList.add("hidden");
+  sparkleContainer.classList.add("hidden");
+  
   message.innerHTML = `${lang_COUPON_GET}<br>`;
   panel.classList.remove("win", "lose");
   panel.classList.add("win");
@@ -3164,8 +3295,8 @@ function showCouponAlert() {
 
   panel.style.display = "block";
   document.getElementById("overlay").classList.add("show");
-  video.currentTime = 0;
-  video.play().catch((err) => console.warn("재생 실패:", err));
+  //video.currentTime = 0;
+  //video.play().catch((err) => console.warn("재생 실패:", err));
 
   panel.classList.add("show");
 }
@@ -3507,7 +3638,8 @@ function renderTokens() {
               console.log(`${lang_COUPON_ISSUED}`);
               if (!user_demo) {
                 checkCoupon();
-                showCouponAlert();
+                //showCouponAlert();
+                playGiftSequence(() => showCouponAlert());
               } else {
                 showDemoAlert();
               }
