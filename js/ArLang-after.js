@@ -760,7 +760,7 @@ var lang = {
     PROMOTION_AR_WARNING: "ARをより楽しむために",
     FACEBOOK_SHARE_MSG1: "Facebookの共有画像の準備ができました。",
     FACEBOOK_SHARE_MSG2: "Facebookアプリを選択して共有してください。",
-    EXP_INFO_TITLE: 'Inspire Viewは<span style="font-weight:bold;">アプリのインストールやログインなしで</span>すぐにご利用いただけます。',
+    EXP_INFO_TITLE: 'Inspire View は <span style="font-weight:bold;">アプリのインストールやログインなしで</span> すぐにご利用いただけます。',
     EXP_INFO_CAMERA_TITLE: "カメラ使用のご案内\nAR画面を表示するためにカメラの使用許可が必要です。",
     EXP_INFO_CAMERA_TITLE2: "撮影内容は保存されませんのでご安心ください。体験目的以外には使用されません。",
     EXP_INFO_MOTION_TITLE: "動作認識のご案内\nAR画面がユーザーの動きに自然に反応するために使用されます。",
