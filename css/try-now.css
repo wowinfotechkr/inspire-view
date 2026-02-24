@@ -7,8 +7,23 @@
   flex-direction: column;
   align-items: center;
   pointer-events: none;
-  z-index: 999;
+  z-index: 998;
   transition: opacity 0.3s ease;
+  width: calc(100% - 40px);
+}
+
+#guide-arrow-text {
+  text-align: center;
+  line-height: 1.2;
+  padding: 22px 26px;
+  border-radius: 16px;
+  backdrop-filter: blur(6px);
+  background: rgba(32, 69, 130, 0.35);
+  font-size: 18px;
+  font-weight: 600;
+  color: #fff;
+  border: 2px solid #fff;
+  margin-top: 16px;
 }
 
 #arrow-wrapper {
@@ -1878,17 +1893,12 @@ body.no-scroll {
   position: absolute;
   top: 0;
   /* 시작 위치를 더 멀리 잡아서 천천히 들어오게 함 */
-  left: -200%; 
+  left: -200%;
   width: 100%; /* 빛줄기를 넓게 퍼뜨려야 휙 지나가는 느낌이 줄어듦 */
   height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.3), /* 빛 농도를 살짝 낮춤 */
-    transparent
-  );
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), /* 빛 농도를 살짝 낮춤 */ transparent);
   transform: skewX(-20deg);
-  
+
   /* 총 6초 주기 / 부드러운 가감속(cubic-bezier) 적용 */
   animation: shine-graceful 6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
@@ -3487,7 +3497,7 @@ body.lang-en .inapp-warning {
   border-radius: 12px;
   color: #fff;
   cursor: pointer;
-  z-index: 999;
+  z-index: 998;
 
   width: calc(100% - 60px);
   max-width: 400px;
@@ -3625,4 +3635,3 @@ body.lang-en .inapp-warning {
 .hidden {
   display: none;
 }
-
