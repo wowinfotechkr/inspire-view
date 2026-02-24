@@ -242,9 +242,9 @@ function initPermissionScreen() {
   list.innerHTML = "";
 
   const currentLang = getLang();
-  const items = [{ id: "markCamera", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.0.9/img/camera.png", txt: lang[currentLang]["EXP_INFO_CAMERA_TITLE"] }];
+  const items = [{ id: "markCamera", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.1/img/camera.png", txt: lang[currentLang]["EXP_INFO_CAMERA_TITLE"] }];
   if (isIOS) {
-    items.push({ id: "markMotion", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.0.9/img/motion.png", txt: lang[currentLang]["EXP_INFO_MOTION_TITLE"] });
+    items.push({ id: "markMotion", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.1/img/motion.png", txt: lang[currentLang]["EXP_INFO_MOTION_TITLE"] });
   }
 
   items.forEach((item) => {
@@ -891,7 +891,7 @@ function playGiftSequence() {
     renderer: "svg",
     loop: false,
     autoplay: false,
-    path: "./lottie/gift_box.json",
+    path: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.1/lottie/gift_box.json",
   });
 
   giftAnim.addEventListener("DOMLoaded", () => {
@@ -961,7 +961,7 @@ function startTripleSparkles() {
       renderer: "svg",
       loop: false,
       autoplay: false,
-      path: "./lottie/fireworks.json",
+      path: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.1/lottie/fireworks.json",
     });
 
     anims.push(anim);
@@ -1406,7 +1406,7 @@ async function startPortalLottie() {
     renderer: "svg",
     loop: false,
     autoplay: true,
-    path: "/AR/lottie/portal_ntokozo.json",
+    path: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.1/lottie/portal_ntokozo.json",
   });
 }
 

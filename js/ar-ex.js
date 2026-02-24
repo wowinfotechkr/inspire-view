@@ -314,9 +314,9 @@ function initPermissionScreen() {
   list.innerHTML = "";
 
   const currentLang = getLang();
-  const items = [{ id: "markCamera", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.0.8/img/camera.png", txt: lang[currentLang]["EXP_INFO_CAMERA_TITLE"] }];
+  const items = [{ id: "markCamera", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.1/img/camera.png", txt: lang[currentLang]["EXP_INFO_CAMERA_TITLE"] }];
   if (isIOS) {
-    items.push({ id: "markMotion", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.0.8/img/motion.png", txt: lang[currentLang]["EXP_INFO_MOTION_TITLE"] });
+    items.push({ id: "markMotion", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.1/img/motion.png", txt: lang[currentLang]["EXP_INFO_MOTION_TITLE"] });
   }
 
   items.forEach((item) => {
@@ -1240,14 +1240,143 @@ function checkCouponCreated() {
   }
 }
 
+function playGiftSequence() {
+  giftPlaying = false;
+
+  var giftOverlay = document.getElementById("giftOverlay");
+  const giftContainer = document.getElementById("gift-lottie");
+  const sparkleContainer = document.getElementById("sparkle-lottie");
+
+  if (giftAnim) giftAnim.destroy();
+  giftContainer.innerHTML = "";
+  sparkleContainer.innerHTML = "";
+
+  giftOverlay.classList.remove("hidden");
+  giftContainer.classList.remove("hidden");
+  sparkleContainer.classList.add("hidden");
+
+  giftAnim = lottie.loadAnimation({
+    container: giftContainer,
+    renderer: "svg",
+    loop: false,
+    autoplay: false,
+    path: "../TRY-NOW/lottie/gift_box.json",
+  });
+
+ 
+  giftAnim.addEventListener("DOMLoaded", () => {
+    giftAnim.playSegments([0, 15], true);
+  });
+
+  giftAnim.addEventListener("complete", () => {
+    if (!giftPlaying) {
+      giftAnim.playSegments([0, 15], true);
+      return;
+    }
+
+    giftContainer.classList.add("hidden");
+    sparkleContainer.classList.remove("hidden");
+    //sparkleAnim.goToAndPlay(0, true);
+    startTripleSparkles();
+  });
+
+  giftContainer.onclick = () => {
+    if (giftPlaying) return;
+    giftPlaying = true;
+    giftAnim.setSpeed(2);
+    giftAnim.loop = false;
+    giftAnim.playSegments([15, 30], true);
+    saveUserLog("TRY - 선물상자 클릭");
+
+    const sound = document.getElementById("gift-sound");
+    if (sound) {
+      sound.currentTime = 0; // 사운드가 씹히지 않게 초기화 후 재생
+      sound.play().catch((e) => console.log("Sound play failed", e));
+    }
+  };
+
+}
+
+function startTripleSparkles() {
+  const sparkleContainer = document.getElementById("sparkle-lottie");
+
+  sparkleContainer.innerHTML = "";
+  sparkleContainer.style.position = "relative";
+  sparkleContainer.style.overflow = "visible"; 
+
+  const anims = [];
+
+  for (let i = 0; i < 3; i++) {
+  const d = document.createElement("div");
+  d.style.position = "absolute";
+  d.style.inset = "0";
+  d.style.pointerEvents = "none";
+  d.style.transformOrigin = "center center";
+
+  if (i === 0) {
+    d.style.transform = "translate(0px, 0px) scale(1.1)";
+  }
+
+  if (i === 1) {
+    d.style.transform = "translate(40px, -70px) scale(1.5)";
+  }
+
+  if (i === 2) {
+    d.style.transform = "translate(-35px, 60px) scale(1.3)";
+  }
+
+  sparkleContainer.appendChild(d);
+
+  const anim = lottie.loadAnimation({
+    container: d,
+    renderer: "svg",
+    loop: false,
+    autoplay: false,
+    path: "../TRY-NOW/lottie/fireworks.json",
+  });
+
+  anims.push(anim);
+}
+
+  function chain(idx) {
+    if (!anims[idx] || !anims[idx + 1]) return;
+
+    let fired = false;
+
+    anims[idx].addEventListener("enterFrame", (e) => {
+      const total = anims[idx].totalFrames || 0;
+      if (!fired && total > 0 && e.currentTime >= total * 0.5) {
+        fired = true;
+        anims[idx + 1].goToAndPlay(0, true);
+        chain(idx + 1);
+      }
+    });
+  }
+
+  anims[0].addEventListener("DOMLoaded", () => {
+    anims[0].goToAndPlay(0, true);
+    chain(0);
+  });
+
+  anims[2].addEventListener("complete", () => {
+    document.getElementById("giftOverlay").classList.add("hidden");
+    giftPlaying = false;
+    showCouponAlert();
+  });
+}
+
 
 function showCouponAlert() {
   const panel = document.getElementById("resultPanel");
   const title = document.getElementById("resultTitle");
   const message = document.getElementById("resultMessage");
-  const video = document.getElementById("bgVideo");
+  //const video = document.getElementById("bgVideo");
 
-  
+  var giftContainer = document.getElementById("gift-lottie");
+  var sparkleContainer = document.getElementById("sparkle-lottie");
+  giftContainer.classList.add("hidden");
+  sparkleContainer.classList.add("hidden");
+
   message.innerHTML = `${lang_TICKET_GET_1}<br>${lang_TICKET_GET_2}`;
   panel.classList.remove("win", "lose");
   panel.classList.add("win");
@@ -1259,8 +1388,8 @@ function showCouponAlert() {
 
   panel.style.display = "block";
   document.getElementById("overlay").classList.add("show");
-  video.currentTime = 0;
-  video.play().catch((err) => console.warn("재생 실패:", err));
+  //video.currentTime = 0;
+  //video.play().catch((err) => console.warn("재생 실패:", err));
   showResultSingleButton();
   panel.classList.add("show");
 }
@@ -1912,7 +2041,8 @@ async function spawn2DAroundCamera(mealList, radius) {
             console.log("데이터확인", data.mealSumList);
             if (data.mealSumList) setMealSumList(data.mealSumList, true);
             if (data.couponCd != null && data.couponCd.length == 16) {
-              showCouponAlert();
+              //showCouponAlert();
+              playGiftSequence(() => showCouponAlert());
             } else {
               handleCollect(plane, `${lang_COLLECTION_COMPLETE}`, seq);
             }
@@ -2238,27 +2368,6 @@ function fetchCount_Randomized(state) {
   return Math.floor(Math.random() * (high - low + 1)) + low;
 }
 
-function closeCouponPopup() {
-  document.getElementById("resultPanel").classList.remove("show");
-  document.getElementById("resultTitle").classList.remove("animate-text", "boom-effect");
-  document.getElementById("overlay").classList.remove("show");
-  const overlay = document.getElementById("overlay");
-  const video = document.getElementById("bgVideo");
-
-  overlay.classList.remove("show");
-
-  if (video) {
-    video.pause();
-    video.currentTime = 0;
-  }
-
-  document.getElementById("resultPanel").style.display = "none";
-  scanningPaused = false;
-  if (confettiFrameId) cancelAnimationFrame(confettiFrameId);
-  const canvas = document.getElementById("confettiCanvas");
-  const ctx = canvas.getContext("2d");
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-}
 
 function renderTutorialToken() {
   console.log("renderTutorialToken Start");
