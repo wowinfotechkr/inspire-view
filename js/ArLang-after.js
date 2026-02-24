@@ -270,6 +270,8 @@ var lang = {
     COUPON_WAIT_TITLE: "잠시만요!",
     COUPON_WAIT1: "",
     COUPON_WAIT2: " 후에 다시 시도해 주세요.",
+    GUIDE_ARROW_TEXT1: "화살표 방향으로<br>휴대폰을 돌려주세요.",
+    GUIDE_ARROW_TEXT2: "다음 토큰이 있어요!",
   },
   en: {
     AR_INDEX_TITLE: "Rewards Promotion - AR",
@@ -528,6 +530,8 @@ var lang = {
     COUPON_WAIT_TITLE: "Just a moment!",
     COUPON_WAIT1: "Please try again in",
     COUPON_WAIT2: ".",
+    GUIDE_ARROW_TEXT1: "Turn your phone<br>in the direction of the arrow.",
+    GUIDE_ARROW_TEXT2: "The next token is there!",
   },
   ja: {
     AR_INDEX_TITLE: "リワードプロモーション - AR",
@@ -786,6 +790,8 @@ var lang = {
     COUPON_WAIT_TITLE: "少々お待ちください",
     COUPON_WAIT1: "",
     COUPON_WAIT2: "後にもう一度お試しください。",
+    GUIDE_ARROW_TEXT1: "矢印の方向に<br>スマートフォンを回してください。",
+    GUIDE_ARROW_TEXT2: "次のトークンがあります！",
   },
   th: {
     AR_INDEX_TITLE: "โปรโมชั่นรางวัล - AR",
@@ -1044,6 +1050,8 @@ var lang = {
     COUPON_WAIT_TITLE: "กรุณารอสักครู่",
     COUPON_WAIT1: "กรุณาลองใหม่อีกครั้งในอีก",
     COUPON_WAIT2: "",
+    GUIDE_ARROW_TEXT1: "หมุนโทรศัพท์<br>ไปตามทิศทางของลูกศร",
+    GUIDE_ARROW_TEXT2: "โทเค็นถัดไปอยู่ที่นั่น!",
   },
   es: {
     AR_INDEX_TITLE: "Promoción de recompensas - AR",
@@ -1302,6 +1310,8 @@ var lang = {
     COUPON_WAIT_TITLE: "¡Espera un momento!",
     COUPON_WAIT1: "Vuelve a intentarlo en ",
     COUPON_WAIT2: ".",
+    GUIDE_ARROW_TEXT1: "Gira tu teléfono<br>hacia la dirección de la flecha.",
+    GUIDE_ARROW_TEXT2: "¡El siguiente token está allí!",
   },
   vi: {
     AR_INDEX_TITLE: "Khuyến mãi phần thưởng - AR",
@@ -1560,6 +1570,8 @@ var lang = {
     COUPON_WAIT_TITLE: "Vui lòng chờ một chút!",
     COUPON_WAIT1: "Vui lòng thử lại sau ",
     COUPON_WAIT2: ".",
+    GUIDE_ARROW_TEXT1: "Xoay điện thoại<br>theo hướng mũi tên.",
+    GUIDE_ARROW_TEXT2: "Token tiếp theo ở đó!",
   },
   pt: {
     AR_INDEX_TITLE: "Promoção de Recompensas - RA",
@@ -1818,6 +1830,8 @@ var lang = {
     COUPON_WAIT_TITLE: "Aguarde um momento!",
     COUPON_WAIT1: "Tente novamente em ",
     COUPON_WAIT2: ".",
+    GUIDE_ARROW_TEXT1: "Gire seu celular<br>na direção da seta.",
+    GUIDE_ARROW_TEXT2: "O próximo token está lá!",
   },
   km: {
     AR_INDEX_TITLE: "ប្រូម៉ូសិនរង្វាន់ - AR",
@@ -2089,5 +2103,7 @@ var lang = {
     COUPON_WAIT_TITLE: "សូមរង់ចាំបន្តិច",
     COUPON_WAIT1: "សូមព្យាយាមម្តងទៀតក្រោយ ",
     COUPON_WAIT2: "",
+    GUIDE_ARROW_TEXT1: "បង្វិលទូរស័ព្ទ<br>ទៅទិសដៅដែលព្រួញចង្អុល",
+    GUIDE_ARROW_TEXT2: "មានថូខេនបន្ទាប់នៅទីនោះ!",
   },
 };
