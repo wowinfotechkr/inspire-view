@@ -716,11 +716,11 @@ function initPermissionScreen() {
 
   const currentLang = getLang();
   const items = [
-    { id: "markGeo", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.2/img/location.png", txt: lang[currentLang]["PERM_ITEM_LOCATION"] },
-    { id: "markCamera", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.2/img/camera.png", txt: lang[currentLang]["PERM_ITEM_CAMERA"] },
+    { id: "markGeo", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.3/img/location.png", txt: lang[currentLang]["PERM_ITEM_LOCATION"] },
+    { id: "markCamera", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.3/img/camera.png", txt: lang[currentLang]["PERM_ITEM_CAMERA"] },
   ];
   if (isIOS) {
-    items.push({ id: "markMotion", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.2/img/motion.png", txt: lang[currentLang]["PERM_ITEM_MOTION"] });
+    items.push({ id: "markMotion", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.3/img/motion.png", txt: lang[currentLang]["PERM_ITEM_MOTION"] });
   }
 
   items.forEach((item) => {
