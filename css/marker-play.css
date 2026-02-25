@@ -4144,7 +4144,7 @@ body.lang-en .inapp-warning {
   gap: 16px;
 }
 
-#promoCornerBox {
+#promoCornerBox2 {
   position: relative;
 
   width: 100%;
@@ -4159,7 +4159,7 @@ body.lang-en .inapp-warning {
   justify-content: center;
 }
 
-#promoCornerImg {
+#promoCornerImg2 {
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
@@ -4193,4 +4193,31 @@ body.lang-en .inapp-warning {
 
 .join-steps li {
   margin-bottom: 4px !important;
+}
+
+#promoCornerBox {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+
+  width: 20%;
+  aspect-ratio: 1 / 1;
+
+  background: #fff;
+  border-radius: 5px;
+  z-index: 9999;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 40px;
+  max-width: 72px;
+}
+
+#promoCornerImg {
+  width: 80%;
+  height: 80%;
+  object-fit: contain;
+  pointer-events: none;
 }
