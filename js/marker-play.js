@@ -152,7 +152,7 @@ function updateTokenGuide() {
 }
 
 function visibilityLoop() {
-  updateTokenGuide();
+  //updateTokenGuide();
   requestAnimationFrame(visibilityLoop);
 }
 
@@ -578,12 +578,19 @@ function getBearing(lat1, lon1, lat2, lon2) {
 }
 
 function updatePromoOverlay(pos, distance) {
+  console.log("updatePromoOverlay");
   var promo = document.getElementById("promoOverlay");
   if (!showPromoOverlay()) {
-    if (promo) promo.style.display = "block";
+    if (promo) {
+      promo.style.display = "block";
+      hideScannerBox();
+    }
   } else {
     // ✅ startOverlay가 떠 있으면 뒤에 절대 보이면 안 됨 → 강제 숨김
-    if (promo) promo.style.display = "none";
+    if (promo) {
+      promo.style.display = "none";
+      showScannerBox();
+    }    
   }
 
   const distanceDiv = document.getElementById("promoDistance");
@@ -594,6 +601,7 @@ function updatePromoOverlay(pos, distance) {
   // 거리 표시
   const distanceMeter = getDistanceMeter(lat, lng, arEventInfo.eventGpsx, arEventInfo.eventGpsy);
   distanceDiv.innerText = formatDistance(distanceMeter);
+
 }
 
 function hidePromoOverlay() {
@@ -686,6 +694,7 @@ async function refreshPermissionStateOnly() {
   camOK = camState === "granted";
 
   motionGranted = await checkMotionGranted();
+  motionGranted = true;
 
   if (geoDenied || camDenied) showBottomNotice(`${lang_RETRY_REQ}`);
   else hideBottomNotice();
@@ -720,9 +729,10 @@ function initPermissionScreen() {
     { id: "markGeo", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.6/img/location.png", txt: lang[currentLang]["PERM_ITEM_LOCATION"] },
     { id: "markCamera", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.6/img/camera.png", txt: lang[currentLang]["PERM_ITEM_CAMERA"] },
   ];
-  if (isIOS) {
-    items.push({ id: "markMotion", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.6/img/motion.png", txt: lang[currentLang]["PERM_ITEM_MOTION"] });
-  }
+  // if (isIOS) {
+  //   items.push({ id: "markMotion", img: "../img/motion.png", txt: lang[currentLang]["PERM_ITEM_MOTION"] });
+  // }
+  // const items = [{ id: "markCamera", img: "../img/camera.png", txt: lang[currentLang]["PERM_ITEM_CAMERA"] }];
 
   items.forEach((item) => {
     const li = document.createElement("li");
@@ -737,12 +747,12 @@ function initPermissionScreen() {
               `;
     list.appendChild(li);
   });
-  
+
   if (geoOK) {
     document.getElementById("markGeo")?.classList.remove("icon-grayscale");
     document.getElementById("markGeoOK")?.classList.remove("hidden");
   }
-  
+
   if (camOK) {
     document.getElementById("markCamera")?.classList.remove("icon-grayscale");
     document.getElementById("markCameraOK")?.classList.remove("hidden");
@@ -801,7 +811,7 @@ function setSuccess(id) {
     id = "markCamera";
   } else if (id == "mark-motion") {
     id = "markMotion";
-  } else if ("mark-Geo"){
+  } else if ("mark-Geo") {
     id = "markGeo";
   }
 
@@ -915,8 +925,8 @@ async function initPermissionFlow() {
   if (geoOK && camOK && (needsMotion() ? motionGranted : true)) {
     fMaxProgress = 100;
     setTimeout(function () {
-    	document.getElementById("blankOverlay").style.display = "none";
-	}, 700);
+      document.getElementById("blankOverlay").style.display = "none";
+    }, 100);
     loadEvent(true);
   } else {
     showScreen("permissionScreen");
@@ -972,7 +982,7 @@ function requestGeolocation() {
     { enableHighAccuracy: true, timeout: 25000, maximumAge: 10000 },
   );
 
-  saveUserLog("PLAY - 위치권한 버튼 클릭");
+  //saveUserLog("MARKER - 위치권한 버튼 클릭");
 }
 
 function detectAndroid() {
@@ -1013,7 +1023,7 @@ async function requestCamera() {
   } finally {
     isRequesting = false;
     await updatePermissionUI();
-    saveUserLog("PLAY - 카메라권한 버튼 클릭");
+    saveUserLog("MARKER - 카메라권한 버튼 클릭");
     hidePermissionLoader();
   }
 }
@@ -1058,7 +1068,7 @@ async function requestMotion() {
     isRequesting = false;
     await updatePermissionUI();
     hidePermissionLoader();
-    saveUserLog("PLAY - 모션권한 버튼 클릭");
+    //saveUserLog("MARKER - 모션권한 버튼 클릭");
   }
 }
 
@@ -1112,14 +1122,12 @@ function requestGeolocation_old() {
       maximumAge: 0,
     },
   );
-  saveUserLog("PLAY - 위치권한 버튼 클릭");
+  //saveUserLog("MARKER - 위치권한 버튼 클릭");
 }
 
 function toCamelCase(str) {
   return str.replace(/-([a-z])/g, (match, p1) => p1.toUpperCase());
 }
-
-
 
 function requestCamera_old() {
   navigator.mediaDevices
@@ -1154,7 +1162,7 @@ function requestCamera_old() {
         }
       }, 200);
     });
-  saveUserLog("PLAY - 카메라권한 버튼 클릭");
+  saveUserLog("MARKER - 카메라권한 버튼 클릭");
 }
 
 function requestMotion_old() {
@@ -1180,7 +1188,7 @@ function requestMotion_old() {
     hideScreen("motionScreen");
     loadEvent(true);
   }
-  saveUserLog("모션센서권한 버튼 클릭");
+  //saveUserLog("MARKER - 모션센서권한 버튼 클릭");
 }
 
 async function loadEvent(isReadyEnd) {
@@ -1194,42 +1202,9 @@ async function loadEvent(isReadyEnd) {
     hideScreen("permissionScreen");
     document.getElementById("global-map").style.display = "none";
     document.getElementById("event-wrap").style.display = "none";
-    saveUserLog("PLAY - AR 로딩시작");
     initAR();
     return;
   }
-
-  try {
-    //console.log("cCode: "+cCode)
-    //console.log("cBrand: "+cBrand)
-    //console.log("cStore: "+cStore)
-    const res = await fetch("/ar-eventinfo.do?campcd=" + cCode + "&cBrand=" + cBrand + "&cStore=" + cStore);
-    const data = await res.json();
-    //console.log(data);
-
-    arEventInfo = data;
-    console.log("arEventInfo : ", arEventInfo);
-    //arEventInfo.linkDiv = "1";
-
-    if (arEventInfo.linkDiv == "1" && !isInitPermissionEnd) {
-      isInitPermissionEnd = true;
-      initPermissionFlow();
-      return;
-    }
-
-    //currentPositionLoad();
-  } catch (e) {
-    console.log(e);
-  }
-
-  const response = await fetch("/getGoogleMapsKey.do");
-  const apiKey = await response.text();
-   
-  const script = document.createElement("script");
-  script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=onGoogleMapsLoaded&loading=async`;
-  script.async = true;
-  script.defer = true;
-  document.head.appendChild(script);
 
   try {
     if (arEventInfo && arEventInfo.return_cd == "00000000") {
@@ -1257,6 +1232,8 @@ async function loadEvent(isReadyEnd) {
       }
       var startBoxImg2 = document.getElementById("startBoxImg");
       startBoxImg2.src = imgUrlCheck;
+      var promoCornerImg = document.getElementById("promoCornerImg");
+      promoCornerImg.src = imgUrlCheck;
 
       // ✅ 반드시 await
       console.log("eventIsOpen()");
@@ -1294,17 +1271,19 @@ async function loadEvent(isReadyEnd) {
         eventImg = viewAdminUrl + "/uploaded?fileName=" + arEventInfo.eventImg;
       }
 
-      var promoCornerImg = document.getElementById("promoCornerImg");
-      promoCornerImg.src = eventImg;
+      //var promoCornerImg = document.getElementById("promoCornerImg");
+      //promoCornerImg.src = eventImg;
 
-      const address = await getAddressFromLatLng(eventGpsx, eventGpsy);
+      //const address = await getAddressFromLatLng(eventGpsx, eventGpsy);
+      const address = "";
       let addrPlaceholderStr = "display: block;";
       let addrInfoStr = "display: none;";
       if (address != null && address != "") {
         addrPlaceholderStr = "display: none;";
         addrInfoStr = "display: block;";
       }
-      setInfoMapNew(address, eventInfoDateto, eventInfoDatefrom, eventInfoAmt, eventInfoAmtSymbol, eventInfoReward);
+      var retryMin = arEventInfo.eventRetryMin || "0";
+      setInfoMapNew(address, eventInfoDateto, eventInfoDatefrom, eventInfoAmt, eventInfoAmtSymbol, eventInfoReward, retryMin);
       // 세션스토리지에 프로모션명 저장
       //sessionStorage.setItem("cpnTitle", arEventInfo.cpnTitle);
 
@@ -1321,14 +1300,14 @@ async function loadEvent(isReadyEnd) {
       var eventDateEl = document.getElementById("event-date");
       var couponEl = document.getElementById("coupon-content");
       var addressEl = document.getElementById("addrInfo");
-      var address_check = await getAddressFromLatLng(eventGpsx, eventGpsy);
-      var changeNumberEl = document.getElementById("event-changenumber");
+      //var address_check = await getAddressFromLatLng(eventGpsx, eventGpsy);
+      //var changeNumberEl = document.getElementById("event-changenumber");
 
       couponEl.innerHTML = couponContentEl;
 
       eventDateEl.textContent = eventSdate + " ~ " + eventEdate;
-      addressEl.textContent = address_check;
-      changeNumberEl.textContent = eventChangecnt;
+      //addressEl.textContent = address_check;
+      //changeNumberEl.textContent = eventChangecnt;
       //이곳에서 실행
     }
   } catch (e) {
@@ -1390,7 +1369,7 @@ function setInfoMap() {
     // 주소가 준비되면 스켈레톤 숨기고 실제 주소 보여주기
     //addrPlaceholder.style.display = "none";
     // addrInfo.style.display = "block";
-    addrInfo.textContent = address;
+    //addrInfo.textContent = address;
   }
 
   // 4. 확인 버튼 (기존 onConfirm)
@@ -1413,7 +1392,7 @@ function setInfoMap() {
         //initAR();
         initPermissionFlow();
       }
-      saveUserLog("참여하기 버튼 클릭");
+      saveUserLog("MARKER - 참여하기 버튼 클릭");
     });
   }
 
@@ -1536,17 +1515,17 @@ async function eventIsOpen() {
 async function setAddrInfo(lat, lng) {
   console.log("setAddrInfo");
   const el = document.getElementById("addrInfo");
-  el.textContent = await getAddressFromLatLng(lat, lng);
+  //el.textContent = await getAddressFromLatLng(lat, lng);
 }
 
 async function getAddressFromLatLng(lat, lng, callback) {
   console.log("getAddressFromLatLng");
   //if (typeof google === "undefined" || !google.maps) {
-  if (!googleMapApiLoaded) {
-    console.warn("Google Maps not loaded yet.");
-    pendingGeocode = () => setAddrInfo(lat, lng);
-    return "";
-  }
+  // if (!googleMapApiLoaded) {
+  //   console.warn("Google Maps not loaded yet.");
+  //   pendingGeocode = () => setAddrInfo(lat, lng);
+  //   return "";
+  // }
 
   const geocoder = new google.maps.Geocoder();
   const latlng = { lat, lng };
@@ -1565,7 +1544,7 @@ async function getAddressFromLatLng(lat, lng, callback) {
 }
 
 function onGoogleMapsLoaded() {
-  googleMapApiLoaded = true;
+  //googleMapApiLoaded = true;
   if (pendingInit) {
     pendingInit();
     pendingInit = null;
@@ -1638,7 +1617,7 @@ function initMap(lat, lng, radius, img, { fit = "width", padding = 24 } = {}) {
     const finalZoom = computeFinalZoom();
     if (finalZoom == null) return requestAnimationFrame(start);
 
-    mapInitialized = true;
+    //mapInitialized = true;
     mapReady = false;
 
     __nxFinalZoom = finalZoom; // ✅ 최종 줌 저장
@@ -1727,12 +1706,12 @@ function onCameraReady() {
     const canShowBehindUi = !showPromoOverlay();
 
     if (canShowBehindUi) {
-      document.getElementById("gpsLoading").style.display = "flex";
-      console.log("TEST0202 - onCameraReady() - show");
+      //document.getElementById("gpsLoading").style.display = "flex";
+      //console.log("TEST0202 - onCameraReady() - show");
     } else {
-      const gps = document.getElementById("gpsLoading");
-      if (gps) gps.style.display = "none";
-      console.log("TEST0202 - onCameraReady() - hide");
+      // const gps = document.getElementById("gpsLoading");
+      // if (gps) gps.style.display = "none";
+      // console.log("TEST0202 - onCameraReady() - hide");
     }
 
     var rewardUtilCountDiv = document.getElementById("rewardUtilCount");
@@ -1885,13 +1864,13 @@ function windowLoaded() {
         popupMods: ["has-badge"],
         onConfirm: () => {
           //location.replace("/login");
-          saveUserLog("로그인 버튼 클릭");
+          saveUserLog("MARKER - 로그인 버튼 클릭");
           document.getElementById("loginWrap").style.display = "flex";
         },
         allowOutsideClick: true,
       });
     }
-    saveUserLog("리워드 버튼 클릭");
+    saveUserLog("MARKER - 리워드 버튼 클릭");
   });
 
   peekOverlay.addEventListener("click", (e) => {
@@ -1994,10 +1973,10 @@ function closeCouponPopup() {
   document.getElementById("resultPanel").classList.remove("show");
   document.getElementById("resultTitle").classList.remove("animate-text", "boom-effect");
   document.getElementById("overlay").classList.remove("show");
-  //const overlay = document.getElementById("overlay");
+  const overlay = document.getElementById("overlay");
   //const video = document.getElementById("bgVideo");
 
-  //overlay.classList.remove("show");
+  overlay.classList.remove("show");
 
   //if (video) {
   //  video.pause();
@@ -2010,6 +1989,9 @@ function closeCouponPopup() {
   const canvas = document.getElementById("confettiCanvas");
   const ctx = canvas.getContext("2d");
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  isProcessing = false;
+  showScannerBox();
 }
 
 async function checkLogin() {
@@ -2055,6 +2037,7 @@ function closePeek() {
 }
 
 function updateProgress(stepKey) {
+  console.log("stepKey:" + stepKey);
   progress += LOAD_STEPS[stepKey];
   if (progress > 100) progress = 100;
   if (progress == 60) progress = 100;
@@ -2622,6 +2605,7 @@ function setMealSumList(list, isAni) {
     //showCouponAlert()
     //showDemoAlert()
   });
+
   if (mealSumList.length > 0) {
     viewMealCnt = mealSumList[0].MH_VIEW_MEAL_CNT;
     ameal = mealSumList[0].SU_AMEAL;
@@ -2721,9 +2705,9 @@ function stopPortalLottie(isForce) {
   }
 
   if (isForce) {
-    saveUserLog("PLAY - 로딩 종료");
+    saveUserLog("MARKER - 로딩 종료");
   } else {
-    saveUserLog("PLAY - 로딩 종료");
+    saveUserLog("MARKER - 로딩 종료");
   }
 
   const loader = document.getElementById("myapp-ar-loader");
@@ -2820,13 +2804,65 @@ function animateChange(el) {
   el.classList.add("pop-ar");
 }
 
+function checkWin() {
+  console.log("memberid:" + memberid);
+  console.log("cBrand:" + cBrand);
+  console.log("cStore:" + cStore);
+  console.log("cCode:" + cCode);
+
+  if (isProcessing) return;
+  isProcessing = true;
+
+  fetch("/m-win-check.do?memberid=" + memberid + "&brandcd=" + cBrand + "&storecd=" + cStore + "&campcd=" + cCode)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      return response.json(); // ← 서버가 JSON 반환하는 경우
+    })
+    .then((data) => {
+      console.log("result:", data);
+
+      if (data) {
+        const returnCode = data.return_cd;
+        if (returnCode === "00000000" || returnCode === "10000999") {
+          const isWin = Boolean(data?.valid == true);
+
+          if (isWin) {
+            // 당첨
+            //showCouponAlert();
+            hideScannerBox();
+            playGiftSequence(() => showCouponAlert());
+          } else {
+            // 다음 기회에
+            hideScannerBox();
+            showNoCouponAlert();
+          }
+        } else if (returnCode === "10000099") {
+          // n분 뒤 다시 시도
+          hideScannerBox();
+          showWaitCouponAlert(data.return_msg);
+        } else {
+          // 서버 오류
+          isProcessing = false;
+          showToast(`${lang_COMMON_ERROR}`);
+        }
+      }
+    })
+    .catch((error) => {
+      console.error("연결 실패:", error);
+      isProcessing = false;
+      showToast(`${lang_COMMON_FAIL}`);
+    });
+}
+
 function initAR() {
   console.log("initAR");
   setMemberid();
-  getUserMeal();
+  //getUserMeal();
   checkLogin();
   checkCoupon();
-  connectWebSocket();
+  //connectWebSocket();
 
   const observer = new MutationObserver(() => {
     const swalContainer = document.querySelector(".swal2-container");
@@ -2840,28 +2876,41 @@ function initAR() {
   });
   observer.observe(document.body, { childList: true, subtree: true });
 
+  console.log(arEventInfo);
+  var targetImgUrl = arEventInfo.eventImg.substring(0, arEventInfo.eventImg.lastIndexOf("/") + 1) + "target.mind";
+  const tMindUrl = `https://view-admin.beyondt.net/uploaded?fileName=${targetImgUrl}`;
+  console.log("tMindUrl:" + tMindUrl);
+
   const arScene = document.createElement("a-scene");
   arScene.setAttribute("id", "scene");
-  arScene.setAttribute("embedded", "");
+  arScene.setAttribute("mindar-image", `imageTargetSrc: ${tMindUrl}; uiLoading: no; uiScanning: no;`);
   arScene.setAttribute("xr-mode-ui", "enabled: false");
-  arScene.setAttribute("arjs", "sourceType: webcam; debugUIEnabled: false;");
-  arScene.setAttribute("touch-action", "none");
+  arScene.setAttribute("device-orientation-permission-ui", "enabled: false");
 
-  const camera = document.createElement("a-entity");
-  camera.setAttribute("camera", "fov: 40;");
-  camera.setAttribute("id", "main-camera");
-  camera.setAttribute("rotation-reader", "");
-  camera.setAttribute("cursor", "rayOrigin: mouse;");
-  camera.setAttribute("raycaster", "objects: .clickable; far: 1000; interval: 0");
-  camera.setAttribute("look-controls", "touchEnabled: false; mouseEnabled: false;");
-  camera.setAttribute("promo-arrow", "targetLat: 37.12345; targetLon: 127.56789; originLat: 37.12300; originLon: 127.56700");
+  const camera = document.createElement("a-camera");
+  camera.setAttribute("position", "0 0 0");
+  camera.setAttribute("look-controls", "enabled: false");
+
+  const targetEntity = document.createElement("a-entity");
+  targetEntity.setAttribute("id", "ar-target");
+  targetEntity.setAttribute("mindar-image-target", "targetIndex: 0");
 
   arScene.appendChild(camera);
-
+  arScene.appendChild(targetEntity);
   document.body.appendChild(arScene);
 
+  const target = document.getElementById("ar-target");
+  target.addEventListener("targetFound", () => {
+    if (!isInside) return;
+    const gpsLoading = document.getElementById("gpsLoading");
+    let isVisible = gpsLoading && window.getComputedStyle(gpsLoading).display !== "none";
+    if (isVisible) return;
+    if (isStartOverlayVisible()) return;
+    
+    checkWin();
+  });
+
   arScene.addEventListener("loaded", () => {
-    console.log("TEST0108 - arScene loaded");
     sceneLoaded = true;
     updateProgress("scene");
     checkCameraReady();
@@ -2870,16 +2919,24 @@ function initAR() {
   });
 
   const waitForArjsVideo = setInterval(() => {
-    const video = document.getElementById("arjs-video");
-    if (!video) return;
+    const videos = document.querySelectorAll("video");
 
-    if (video.readyState >= 2 && video.videoWidth > 0) {
-      console.log("TEST0108 - AR.js 카메라 준비 완료 (#arjs-video)");
-      videoReady = true;
-      updateProgress("video");
-      clearInterval(waitForArjsVideo);
-      checkCameraReady();
-    }
+    const arVideo = Array.from(videos).find((v) => {
+      return (
+        !v.id && // ID 없는 것
+        v.srcObject && // MediaStream 연결됨
+        v.readyState >= 2 && // HAVE_CURRENT_DATA 이상
+        v.videoWidth > 0 // 실제 카메라 프레임 존재
+      );
+    });
+
+    if (!arVideo) return;
+
+    console.log("AR.js 카메라 준비 완료 (ID 없는 video)");
+    videoReady = true;
+    updateProgress("video");
+    clearInterval(waitForArjsVideo);
+    checkCameraReady();
   }, 100);
 
   arScene.addEventListener("renderstart", () => {
@@ -2921,6 +2978,11 @@ function currentPositionLoad() {
       maximumAge: 30000,
     },
   );
+
+  //gpsLoaded = true;
+  //updateProgress("gps");
+  //isMarkerDataLoaded = true;
+  //updateProgress("markerData");
 }
 
 function handleOrientation(event) {
@@ -2930,6 +2992,8 @@ function handleOrientation(event) {
     // 안드로이드 등에서는 alpha 값을 사용 (보정이 필요할 수 있음)
     compassHeading = 360 - event.alpha;
   }
+  
+  console.log(`compassHeading: ${compassHeading.toFixed(2)}°`);
 }
 
 function currentPositionLoaded(pos) {
@@ -2957,17 +3021,18 @@ function currentPositionLoaded(pos) {
   const lng = pos.coords.longitude;
 
   console.log(arEventInfo);
-  const imgUrl = arEventInfo.eventImg || "/img/logo/logo128.png";
-  absUrl = imgUrl;
+  //const imgUrl = arEventInfo.eventImg || "/img/logo/logo128.png";
+  //absUrl = imgUrl;
 
-  if (absUrl != "/img/logo/logo128.png") {
-    absUrl = "https://view-admin.beyondt.net/uploaded?fileName=" + imgUrl;
-  }
+  //if (absUrl != "/img/logo/logo128.png") {
+  //  absUrl = "https://view-admin.beyondt.net/uploaded?fileName=" + imgUrl;
+  //}
 
-  dispW = IMG_MAX_SIZE;
-  dispH = IMG_MAX_SIZE;
+  //dispW = IMG_MAX_SIZE;
+  //dispH = IMG_MAX_SIZE;
 
-  tokenImgLoad();
+  //tokenImgLoad();
+  checkAndInitNXTokens();
 
   console.log("gpsLoading !!!!");
   isMarkerDataLoaded = true;
@@ -2975,7 +3040,7 @@ function currentPositionLoaded(pos) {
   document.getElementById("gpsLoading").style.display = "none";
   console.log("TEST0202 - currentPositionLoaded(pos): hide");
 
-  saveUserLog("PLAY - 마커 로딩 완료");
+  //saveUserLog("MARKER - 마커 로딩 완료");
 }
 
 function tokenImgLoad() {
@@ -3035,9 +3100,10 @@ function checkAndInitNXTokens() {
     updatePromoOverlay(pos, distance);
   } else {
     isInside = true;
-    initNXTokens("1");
+    showScannerBox();
   }
   watchNXPosition();
+  watchUserDirection();
 }
 
 function onLocationUpdate(lat, lon, accuracy) {
@@ -3058,6 +3124,7 @@ function updateZone(pos, distance) {
   console.log("distance:" + distance);
   console.log("isInside:" + isInside);
   console.log("outCount:" + outCount);
+
   if (distance <= arEventInfo.eventRadius) {
     inCount++;
     outCount = 0;
@@ -3065,10 +3132,11 @@ function updateZone(pos, distance) {
     if (!isInside && inCount >= REQUIRED_COUNT) {
       isInside = true;
       console.log("프로모션 지역 진입 확정");
-      if (isInitNXTokens) initNXTokens();
-      else initNXTokens("1");
-
+      //if (isInitNXTokens) initNXTokens();
+      //else initNXTokens("1");
+      
       hidePromoOverlay();
+      showScannerBox();
     }
   } else {
     outCount++;
@@ -3077,9 +3145,11 @@ function updateZone(pos, distance) {
     if (isInside && outCount >= REQUIRED_COUNT) {
       isInside = false;
       console.log("프로모션 지역 이탈 확정");
-      initNXTokens("2");
+      //initNXTokens("2");
       //alert("프로모션 지역 밖입니다");
+      
       updatePromoOverlay(pos, distance);
+      hideScannerBox();
     }
   }
 }
@@ -3093,6 +3163,15 @@ function isJumpPosition(prev, current) {
   const speed = dist / timeDiff; // m/s
 
   return speed > 15; // 15m/s ≒ 시속 54km (사람 기준 초과)
+}
+
+function watchUserDirection() {
+  setInterval(() => {
+    if (userPos && arEventInfo && userPos.latitude && userPos.longitude && arEventInfo.eventGpsy && arEventInfo.eventGpsx) {
+      //console.log(arEventInfo)      
+      updateArrow(userPos.latitude, userPos.longitude, Number(arEventInfo.eventGpsx), Number(arEventInfo.eventGpsy));
+    }
+  }, 200);
 }
 
 function watchNXPosition() {
@@ -3171,7 +3250,6 @@ function playGiftSequence() {
     path: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.6/lottie/gift_box.json",
   });
 
- 
   giftAnim.addEventListener("DOMLoaded", () => {
     giftAnim.playSegments([0, 15], true);
   });
@@ -3202,7 +3280,6 @@ function playGiftSequence() {
       sound.play().catch((e) => console.log("Sound play failed", e));
     }
   };
-
 }
 
 function startTripleSparkles() {
@@ -3210,41 +3287,41 @@ function startTripleSparkles() {
 
   sparkleContainer.innerHTML = "";
   sparkleContainer.style.position = "relative";
-  sparkleContainer.style.overflow = "visible"; 
+  sparkleContainer.style.overflow = "visible";
 
   const anims = [];
 
   for (let i = 0; i < 3; i++) {
-  const d = document.createElement("div");
-  d.style.position = "absolute";
-  d.style.inset = "0";
-  d.style.pointerEvents = "none";
-  d.style.transformOrigin = "center center";
+    const d = document.createElement("div");
+    d.style.position = "absolute";
+    d.style.inset = "0";
+    d.style.pointerEvents = "none";
+    d.style.transformOrigin = "center center";
 
-  if (i === 0) {
-    d.style.transform = "translate(0px, 0px) scale(1.1)";
+    if (i === 0) {
+      d.style.transform = "translate(0px, 0px) scale(1.1)";
+    }
+
+    if (i === 1) {
+      d.style.transform = "translate(40px, -70px) scale(1.5)";
+    }
+
+    if (i === 2) {
+      d.style.transform = "translate(-35px, 60px) scale(1.3)";
+    }
+
+    sparkleContainer.appendChild(d);
+
+    const anim = lottie.loadAnimation({
+      container: d,
+      renderer: "svg",
+      loop: false,
+      autoplay: false,
+      path: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.6/lottie/fireworks.json",
+    });
+
+    anims.push(anim);
   }
-
-  if (i === 1) {
-    d.style.transform = "translate(40px, -70px) scale(1.5)";
-  }
-
-  if (i === 2) {
-    d.style.transform = "translate(-35px, 60px) scale(1.3)";
-  }
-
-  sparkleContainer.appendChild(d);
-
-  const anim = lottie.loadAnimation({
-    container: d,
-    renderer: "svg",
-    loop: false,
-    autoplay: false,
-    path: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.6/lottie/fireworks.json",
-  });
-
-  anims.push(anim);
-}
 
   function chain(idx) {
     if (!anims[idx] || !anims[idx + 1]) return;
@@ -3278,12 +3355,12 @@ function showCouponAlert() {
   const title = document.getElementById("resultTitle");
   const message = document.getElementById("resultMessage");
   //const video = document.getElementById("bgVideo");
-  
+
   var giftContainer = document.getElementById("gift-lottie");
   var sparkleContainer = document.getElementById("sparkle-lottie");
   giftContainer.classList.add("hidden");
   sparkleContainer.classList.add("hidden");
-  
+
   message.innerHTML = `${lang_COUPON_GET}<br>`;
   panel.classList.remove("win", "lose");
   panel.classList.add("win");
@@ -3298,6 +3375,40 @@ function showCouponAlert() {
   //video.currentTime = 0;
   //video.play().catch((err) => console.warn("재생 실패:", err));
 
+  panel.classList.add("show");
+}
+
+function showNoCouponAlert() {
+  const panel = document.getElementById("resultPanel");
+  const message = document.getElementById("resultMessage");
+
+  message.innerHTML = `${lang_COUPON_NO_GET}<br>`;
+  panel.classList.remove("win", "lose");
+  panel.classList.add("lose");
+
+  document.getElementById("resultText").textContent = `${lang_COUPON_NO_GET_TITLE}`;
+
+  document.getElementById("useCouponBtn").style.display = "none";
+
+  panel.style.display = "block";
+  panel.classList.add("show");
+}
+
+function showWaitCouponAlert(min) {
+  const panel = document.getElementById("resultPanel");
+  const message = document.getElementById("resultMessage");
+
+  const currentLang = getLang();
+  const waitTime = formatWaitTime(currentLang, min);
+
+  message.innerHTML = `${lang_COUPON_WAIT1}${waitTime}${lang_COUPON_WAIT2}<br>`;
+  panel.classList.remove("win", "lose");
+
+  document.getElementById("resultText").textContent = `${lang_COUPON_WAIT_TITLE}`;
+
+  document.getElementById("useCouponBtn").style.display = "none";
+
+  panel.style.display = "block";
   panel.classList.add("show");
 }
 
@@ -3955,7 +4066,7 @@ function fetchCount_Randomized(state) {
   return Math.floor(Math.random() * (high - low + 1)) + low;
 }
 
-function setInfoMapNew(address, eventInfoDateto, eventInfoDatefrom, eventInfoAmt, eventInfoAmtSymbol, eventInfoReward) {
+function setInfoMapNew(address, eventInfoDateto, eventInfoDatefrom, eventInfoAmt, eventInfoAmtSymbol, eventInfoReward, retryMin) {
   if (typeof initMap === "function") {
     initMap(eventGpsx, eventGpsy, eventRadius, eventImg);
   }
@@ -3976,7 +4087,7 @@ function setInfoMapNew(address, eventInfoDateto, eventInfoDatefrom, eventInfoAmt
   }
   console.log("address : ", address);
   if (typeof address !== "undefined" && address != null) {
-    arModalInfolocation.classList.remove("hidden");
+    //arModalInfolocation.classList.remove("hidden");
     addrInfo.textContent = address;
   }
 
@@ -3998,33 +4109,43 @@ function setInfoMapNew(address, eventInfoDateto, eventInfoDatefrom, eventInfoAmt
     infoReward.textContent = eventInfoReward;
   }
 
-  var changeNumberEl2 = document.getElementById("event-changenumber-new");
-  changeNumberEl2.textContent = eventChangeMealCnt;
-
   var infoTitle = document.getElementById("arModalTitle");
   infoTitle.textContent = `${lang_EVENT_INFO}`;
+
+  var markerMsg1 = document.getElementById("arModalMarkerJoinMsg1");
+  markerMsg1.innerHTML = `${lang_MARKER_JOIN_MSG_1}`;
+
+  var markerMsg2 = document.getElementById("arModalMarkerJoinMsg2");
+  markerMsg2.innerHTML = `${lang_MARKER_JOIN_MSG_2}`;
+
+  var markerMsg3 = document.getElementById("arModalMarkerJoinMsg3");
+  console.log("retryMin:"+retryMin)
+  console.log("formatWaitTime(retryMin):"+formatWaitTime(retryMin))
+  var msgChange = `${lang_MARKER_JOIN_MSG_3}`.replace("??", formatWaitTime(getLang(), retryMin));
+  markerMsg3.innerHTML = msgChange;
 }
 
 function fitInstructionsToCard() {
+  console.log("fitInstructionsToCard 확인");
   const card = document.querySelector(".arOverlayCard");
   const header = document.querySelector(".arOverlayHeader");
-  const map = document.getElementById("global-map-new");
+  const marker = document.getElementById("arModalMarkerImg"); // 👈 이미지 영역
   const count = document.getElementById("arModalInfoCount");
   const inst = document.querySelector(".arModalContent .instructions");
 
-  if (!card || !header || !map || !count || !inst) return;
+  if (!card || !header || !marker || !count || !inst) return;
 
   const cardMax = Math.floor(window.innerHeight * 0.8);
 
   const headerH = header.offsetHeight || 0;
-  const mapH = map.offsetHeight || 0;
+  const markerH = marker.offsetHeight || 0; // 👈 이미지 높이
   const countH = count.offsetHeight || 0;
 
   const extra = 50;
 
-  const available = cardMax - headerH - mapH - countH - extra;
+  const available = cardMax - headerH - markerH - countH - extra;
 
-  inst.style.maxHeight = Math.max(90, available) + "px";
+  inst.style.maxHeight = Math.max(85, available) + "px";
   inst.style.overflowY = "auto";
 }
 
@@ -4078,7 +4199,9 @@ function isStartOverlayVisible() {
 }
 
 function applyGateState() {
+  console.log("applyGateState");
   const startVisible = isStartOverlayVisible();
+  console.log(startVisible);
 
   const gps = document.getElementById("gpsLoading");
   const promo = document.getElementById("promoOverlay");
@@ -4372,37 +4495,14 @@ function setArModal() {
 
   function openArModal() {
     if (isArModalOpen) return;
-
     isArModalOpen = true;
-
-    modal.classList.remove("hidden");
-    modal.style.opacity = "0";
-    modal.style.pointerEvents = "none";
-
     requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        if (window.__nxReflowMap) window.__nxReflowMap(24);
-      });
+      fitInstructionsToCard();
+      syncScrollState();
     });
-
-    const waitMap = () => {
-      if (!mapReady) return requestAnimationFrame(waitMap);
-
-      // ✅ 첫 오픈만 250ms, 이후는 0ms
-      const delay = hasOpenedOnce ? 0 : 0;
-
-      setTimeout(() => {
-        modal.style.opacity = "1";
-        modal.style.pointerEvents = "auto";
-
-        requestAnimationFrame(() => fitInstructionsToCard());
-        history.pushState({ arModal: true }, "", location.href);
-
-        hasOpenedOnce = true; // ✅ 여기서 트리거 켜기
-      }, delay);
-    };
-
-    waitMap();
+    modal.classList.remove("hidden");
+    //modal.style.opacity = "0";
+    //modal.style.pointerEvents = "none";
   }
 
   function closeArModal(fromPopstate = false) {
@@ -4428,11 +4528,34 @@ function setArModal() {
 
     decideGateAndRender();
     applyGateState();
+
+    showScannerBox();
   });
 
-  toggleBtn.addEventListener("click", openArModal);
+  //toggleBtn.addEventListener("click", openArModal);
+  toggleBtn.addEventListener("click", function () {
+    //20260224- 여기에서 확인
+    openArModal();
+    //checkWin();
+  });
   closeBtn.addEventListener("click", () => closeArModal(false));
   backdrop.addEventListener("click", () => closeArModal(false));
+}
+
+function showScannerBox() {
+  const promoOverlay = document.getElementById("promoOverlay");
+  let isVisible = promoOverlay && window.getComputedStyle(promoOverlay).display !== "none";
+  if (isVisible) return;
+  const startOverlay = document.getElementById("startOverlay");
+  isVisible = startOverlay && window.getComputedStyle(startOverlay).display !== "none";
+  if (isVisible) return;
+
+  const scannerBox = document.getElementById("scannerBox");
+  scannerBox.style.display = "flex";
+}
+function hideScannerBox() {
+  const scannerBox = document.getElementById("scannerBox");
+  scannerBox.style.display = "none";
 }
 
 function preloadAudio(id) {
@@ -4441,4 +4564,107 @@ function preloadAudio(id) {
 
   audio.preload = "auto"; // none → auto
   audio.load(); // 네트워크 요청 시작
+}
+
+function setupCompass() {
+  if (typeof DeviceOrientationEvent !== "undefined") {
+    // iOS 13+
+    if (typeof DeviceOrientationEvent.requestPermission === "function") {
+      DeviceOrientationEvent.requestPermission().then((permissionState) => {
+        if (permissionState === "granted") {
+          window.addEventListener("deviceorientation", handleOrientation, true);
+        }
+      });
+    } else {
+      window.addEventListener("deviceorientationabsolute", handleOrientation, true);
+      window.addEventListener("deviceorientation", handleOrientation, true);
+    }
+  }
+}
+
+function handleOrientation(event) {
+  if (event.webkitCompassHeading) {
+    currentHeading = event.webkitCompassHeading; // iOS
+  } else if (event.alpha !== null) {
+    currentHeading = 360 - event.alpha; // Android 보정
+  }
+}
+
+function updateArrow(userLat, userLng, promoLat, promoLng) {
+  if (!currentHeading) return;
+  
+  //console.log(`[GPS] User: ${userLat.toFixed(6)}, ${userLng.toFixed(6)} | Promo: ${promoLat.toFixed(6)}, ${promoLng.toFixed(6)}`);
+  const bearingToPromo = getBearing(userLat, userLng, promoLat, promoLng);
+
+  let newRotation = bearingToPromo - currentHeading;
+  let diff = newRotation - (lastRotation % 360);
+  
+  if (diff > 180) diff -= 360;
+  else if (diff < -180) diff += 360;
+  
+  lastRotation += diff;
+  
+  //console.log(`[Logic] Bearing: ${bearingToPromo.toFixed(2)}°, CurrentHeading: ${currentHeading.toFixed(2)}°, FinalRotation: ${rotation.toFixed(2)}°`);
+
+  const arrow = document.getElementById("promoArrowImg");
+  if (arrow) {
+    arrow.style.transform = `rotate(${lastRotation}deg)`;
+    if (!arrow.classList.contains("loaded")) {
+      arrow.classList.add("loaded");
+    }
+  }
+}
+
+function formatWaitTime(currentLang, min) {
+  if (!min || min <= 0) return "";
+
+  const hours = Math.floor(min / 60);
+  const minutes = min % 60;
+
+  const isOne = (n) => n === 1;
+
+  switch (currentLang) {
+    case "ko":
+      if (hours && minutes) return `${hours}시간 ${minutes}분`;
+      if (hours) return `${hours}시간`;
+      return `${minutes}분`;
+
+    case "en":
+      if (hours && minutes) return `${hours} ${isOne(hours) ? "hour" : "hours"} ${minutes} ${isOne(minutes) ? "minute" : "minutes"}`;
+      if (hours) return `${hours} ${isOne(hours) ? "hour" : "hours"}`;
+      return `${minutes} ${isOne(minutes) ? "minute" : "minutes"}`;
+
+    case "ja":
+      if (hours && minutes) return `${hours}時間${minutes}分`;
+      if (hours) return `${hours}時間`;
+      return `${minutes}分`;
+
+    case "th":
+      if (hours && minutes) return `${hours} ชั่วโมง ${minutes} นาที`;
+      if (hours) return `${hours} ชั่วโมง`;
+      return `${minutes} นาที`;
+
+    case "es":
+      if (hours && minutes) return `${hours} ${isOne(hours) ? "hora" : "horas"} ${minutes} ${isOne(minutes) ? "minuto" : "minutos"}`;
+      if (hours) return `${hours} ${isOne(hours) ? "hora" : "horas"}`;
+      return `${minutes} ${isOne(minutes) ? "minuto" : "minutos"}`;
+
+    case "vi":
+      if (hours && minutes) return `${hours} giờ ${minutes} phút`;
+      if (hours) return `${hours} giờ`;
+      return `${minutes} phút`;
+
+    case "pt":
+      if (hours && minutes) return `${hours} ${isOne(hours) ? "hora" : "horas"} ${minutes} ${isOne(minutes) ? "minuto" : "minutos"}`;
+      if (hours) return `${hours} ${isOne(hours) ? "hora" : "horas"}`;
+      return `${minutes} ${isOne(minutes) ? "minuto" : "minutos"}`;
+
+    case "km":
+      if (hours && minutes) return `${hours} ម៉ោង ${minutes} នាទី`;
+      if (hours) return `${hours} ម៉ោង`;
+      return `${minutes} នាទី`;
+
+    default:
+      return `${min} min`;
+  }
 }
