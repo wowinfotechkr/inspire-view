@@ -590,7 +590,7 @@ function updatePromoOverlay(pos, distance) {
     if (promo) {
       promo.style.display = "none";
       showScannerBox();
-    }    
+    }
   }
 
   const distanceDiv = document.getElementById("promoDistance");
@@ -601,7 +601,6 @@ function updatePromoOverlay(pos, distance) {
   // 거리 표시
   const distanceMeter = getDistanceMeter(lat, lng, arEventInfo.eventGpsx, arEventInfo.eventGpsy);
   distanceDiv.innerText = formatDistance(distanceMeter);
-
 }
 
 function hidePromoOverlay() {
@@ -726,8 +725,8 @@ function initPermissionScreen() {
 
   const currentLang = getLang();
   const items = [
-    { id: "markGeo", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.6/img/location.png", txt: lang[currentLang]["PERM_ITEM_LOCATION"] },
-    { id: "markCamera", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.6/img/camera.png", txt: lang[currentLang]["PERM_ITEM_CAMERA"] },
+    { id: "markGeo", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.7/img/location.png", txt: lang[currentLang]["PERM_ITEM_LOCATION"] },
+    { id: "markCamera", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.7/img/camera.png", txt: lang[currentLang]["PERM_ITEM_CAMERA"] },
   ];
   // if (isIOS) {
   //   items.push({ id: "markMotion", img: "../img/motion.png", txt: lang[currentLang]["PERM_ITEM_MOTION"] });
@@ -1232,8 +1231,8 @@ async function loadEvent(isReadyEnd) {
       }
       var startBoxImg2 = document.getElementById("startBoxImg");
       startBoxImg2.src = imgUrlCheck;
-      var promoCornerImg = document.getElementById("promoCornerImg");
-      promoCornerImg.src = imgUrlCheck;
+      var promoCornerImg2 = document.getElementById("promoCornerImg2");
+      promoCornerImg2.src = imgUrlCheck;
 
       // ✅ 반드시 await
       console.log("eventIsOpen()");
@@ -1270,9 +1269,8 @@ async function loadEvent(isReadyEnd) {
       } else {
         eventImg = viewAdminUrl + "/uploaded?fileName=" + arEventInfo.eventImg;
       }
-
-      //var promoCornerImg = document.getElementById("promoCornerImg");
-      //promoCornerImg.src = eventImg;
+      var promoCornerImg = document.getElementById("promoCornerImg");
+      promoCornerImg.src = eventImg;
 
       //const address = await getAddressFromLatLng(eventGpsx, eventGpsy);
       const address = "";
@@ -1284,7 +1282,7 @@ async function loadEvent(isReadyEnd) {
       }
       var retryMin = arEventInfo.eventRetryMin || "0";
       setInfoMapNew(address, eventInfoDateto, eventInfoDatefrom, eventInfoAmt, eventInfoAmtSymbol, eventInfoReward, retryMin);
-      // 세션스토리지에 프로모션명 저장
+
       //sessionStorage.setItem("cpnTitle", arEventInfo.cpnTitle);
 
       if (arEventInfo.linkDiv == "1") {
@@ -1300,14 +1298,14 @@ async function loadEvent(isReadyEnd) {
       var eventDateEl = document.getElementById("event-date");
       var couponEl = document.getElementById("coupon-content");
       var addressEl = document.getElementById("addrInfo");
-      //var address_check = await getAddressFromLatLng(eventGpsx, eventGpsy);
-      //var changeNumberEl = document.getElementById("event-changenumber");
+      var address_check = await getAddressFromLatLng(eventGpsx, eventGpsy);
+      var changeNumberEl = document.getElementById("event-changenumber");
 
       couponEl.innerHTML = couponContentEl;
 
       eventDateEl.textContent = eventSdate + " ~ " + eventEdate;
-      //addressEl.textContent = address_check;
-      //changeNumberEl.textContent = eventChangecnt;
+      addressEl.textContent = address_check;
+      changeNumberEl.textContent = eventChangecnt;
       //이곳에서 실행
     }
   } catch (e) {
@@ -1366,10 +1364,10 @@ function setInfoMap() {
   }
 
   if (typeof address !== "undefined" && address) {
-    // 주소가 준비되면 스켈레톤 숨기고 실제 주소 보여주기
-    //addrPlaceholder.style.display = "none";
-    // addrInfo.style.display = "block";
-    //addrInfo.textContent = address;
+     //주소가 준비되면 스켈레톤 숨기고 실제 주소 보여주기
+    addrPlaceholder.style.display = "none";
+     addrInfo.style.display = "block";
+     addrInfo.textContent = address;
   }
 
   // 4. 확인 버튼 (기존 onConfirm)
@@ -1515,17 +1513,17 @@ async function eventIsOpen() {
 async function setAddrInfo(lat, lng) {
   console.log("setAddrInfo");
   const el = document.getElementById("addrInfo");
-  //el.textContent = await getAddressFromLatLng(lat, lng);
+  el.textContent = await getAddressFromLatLng(lat, lng);
 }
 
 async function getAddressFromLatLng(lat, lng, callback) {
   console.log("getAddressFromLatLng");
   //if (typeof google === "undefined" || !google.maps) {
-  // if (!googleMapApiLoaded) {
-  //   console.warn("Google Maps not loaded yet.");
-  //   pendingGeocode = () => setAddrInfo(lat, lng);
-  //   return "";
-  // }
+  if (!googleMapApiLoaded) {
+    console.warn("Google Maps not loaded yet.");
+    pendingGeocode = () => setAddrInfo(lat, lng);
+    return "";
+  }
 
   const geocoder = new google.maps.Geocoder();
   const latlng = { lat, lng };
@@ -1544,7 +1542,7 @@ async function getAddressFromLatLng(lat, lng, callback) {
 }
 
 function onGoogleMapsLoaded() {
-  //googleMapApiLoaded = true;
+  googleMapApiLoaded = true;
   if (pendingInit) {
     pendingInit();
     pendingInit = null;
@@ -1579,7 +1577,7 @@ function initMap(lat, lng, radius, img, { fit = "width", padding = 24 } = {}) {
     pendingInit = () => initMap(lat, lng, radius, img, { fit, padding });
     return;
   }
-
+  
   const center = new google.maps.LatLng(lat, lng);
   const mapEl = document.getElementById("global-map-new");
 
@@ -1617,7 +1615,7 @@ function initMap(lat, lng, radius, img, { fit = "width", padding = 24 } = {}) {
     const finalZoom = computeFinalZoom();
     if (finalZoom == null) return requestAnimationFrame(start);
 
-    //mapInitialized = true;
+    mapInitialized = true;
     mapReady = false;
 
     __nxFinalZoom = finalZoom; // ✅ 최종 줌 저장
@@ -2692,7 +2690,7 @@ function startPortalLottie() {
     renderer: "svg",
     loop: false, // 🔁 필요에 따라 true/false
     autoplay: true, // 페이지 진입 시 자동재생
-    path: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.6/lottie/portal_ntokozo.json",
+    path: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.7/lottie/portal_ntokozo.json",
   });
 }
 
@@ -2906,7 +2904,7 @@ function initAR() {
     let isVisible = gpsLoading && window.getComputedStyle(gpsLoading).display !== "none";
     if (isVisible) return;
     if (isStartOverlayVisible()) return;
-    
+
     checkWin();
   });
 
@@ -2992,7 +2990,7 @@ function handleOrientation(event) {
     // 안드로이드 등에서는 alpha 값을 사용 (보정이 필요할 수 있음)
     compassHeading = 360 - event.alpha;
   }
-  
+
   console.log(`compassHeading: ${compassHeading.toFixed(2)}°`);
 }
 
@@ -3134,7 +3132,7 @@ function updateZone(pos, distance) {
       console.log("프로모션 지역 진입 확정");
       //if (isInitNXTokens) initNXTokens();
       //else initNXTokens("1");
-      
+
       hidePromoOverlay();
       showScannerBox();
     }
@@ -3147,7 +3145,7 @@ function updateZone(pos, distance) {
       console.log("프로모션 지역 이탈 확정");
       //initNXTokens("2");
       //alert("프로모션 지역 밖입니다");
-      
+
       updatePromoOverlay(pos, distance);
       hideScannerBox();
     }
@@ -3168,7 +3166,7 @@ function isJumpPosition(prev, current) {
 function watchUserDirection() {
   setInterval(() => {
     if (userPos && arEventInfo && userPos.latitude && userPos.longitude && arEventInfo.eventGpsy && arEventInfo.eventGpsx) {
-      //console.log(arEventInfo)      
+      //console.log(arEventInfo)
       updateArrow(userPos.latitude, userPos.longitude, Number(arEventInfo.eventGpsx), Number(arEventInfo.eventGpsy));
     }
   }, 200);
@@ -3247,7 +3245,7 @@ function playGiftSequence() {
     renderer: "svg",
     loop: false,
     autoplay: false,
-    path: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.6/lottie/gift_box.json",
+    path: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.7/lottie/gift_box.json",
   });
 
   giftAnim.addEventListener("DOMLoaded", () => {
@@ -3317,7 +3315,7 @@ function startTripleSparkles() {
       renderer: "svg",
       loop: false,
       autoplay: false,
-      path: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.6/lottie/fireworks.json",
+      path: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.7/lottie/fireworks.json",
     });
 
     anims.push(anim);
@@ -4067,7 +4065,9 @@ function fetchCount_Randomized(state) {
 }
 
 function setInfoMapNew(address, eventInfoDateto, eventInfoDatefrom, eventInfoAmt, eventInfoAmtSymbol, eventInfoReward, retryMin) {
+    console.log("setInfoMapNew 확인")
   if (typeof initMap === "function") {
+    console.log("initMap 확인")
     initMap(eventGpsx, eventGpsy, eventRadius, eventImg);
   }
   const eventDateEl = document.getElementById("event-date");
@@ -4087,7 +4087,7 @@ function setInfoMapNew(address, eventInfoDateto, eventInfoDatefrom, eventInfoAmt
   }
   console.log("address : ", address);
   if (typeof address !== "undefined" && address != null) {
-    //arModalInfolocation.classList.remove("hidden");
+    arModalInfolocation.classList.remove("hidden");
     addrInfo.textContent = address;
   }
 
@@ -4119,33 +4119,32 @@ function setInfoMapNew(address, eventInfoDateto, eventInfoDatefrom, eventInfoAmt
   markerMsg2.innerHTML = `${lang_MARKER_JOIN_MSG_2}`;
 
   var markerMsg3 = document.getElementById("arModalMarkerJoinMsg3");
-  console.log("retryMin:"+retryMin)
-  console.log("formatWaitTime(retryMin):"+formatWaitTime(retryMin))
+  console.log("retryMin:" + retryMin);
+  console.log("formatWaitTime(retryMin):" + formatWaitTime(retryMin));
   var msgChange = `${lang_MARKER_JOIN_MSG_3}`.replace("??", formatWaitTime(getLang(), retryMin));
   markerMsg3.innerHTML = msgChange;
 }
 
 function fitInstructionsToCard() {
-  console.log("fitInstructionsToCard 확인");
   const card = document.querySelector(".arOverlayCard");
   const header = document.querySelector(".arOverlayHeader");
-  const marker = document.getElementById("arModalMarkerImg"); // 👈 이미지 영역
+  const map = document.getElementById("global-map-new");
   const count = document.getElementById("arModalInfoCount");
   const inst = document.querySelector(".arModalContent .instructions");
 
-  if (!card || !header || !marker || !count || !inst) return;
+  if (!card || !header || !map || !count || !inst) return;
 
   const cardMax = Math.floor(window.innerHeight * 0.8);
 
   const headerH = header.offsetHeight || 0;
-  const markerH = marker.offsetHeight || 0; // 👈 이미지 높이
+  const mapH = map.offsetHeight || 0;
   const countH = count.offsetHeight || 0;
 
   const extra = 50;
 
-  const available = cardMax - headerH - markerH - countH - extra;
+  const available = cardMax - headerH - mapH - countH - extra;
 
-  inst.style.maxHeight = Math.max(85, available) + "px";
+  inst.style.maxHeight = Math.max(90, available) + "px";
   inst.style.overflowY = "auto";
 }
 
@@ -4492,7 +4491,7 @@ function setArModal() {
   window.openPromEndOverlay2 = openPromEndOverlay2;
   window.closePromEndOverlay2 = closePromEndOverlay2;
   window.openPromEndOverlay2For = openPromEndOverlay2For;
-
+/*
   function openArModal() {
     if (isArModalOpen) return;
     isArModalOpen = true;
@@ -4503,6 +4502,42 @@ function setArModal() {
     modal.classList.remove("hidden");
     //modal.style.opacity = "0";
     //modal.style.pointerEvents = "none";
+  }
+  */
+  
+  function openArModal() {
+    if (isArModalOpen) return;
+
+    isArModalOpen = true;
+
+    modal.classList.remove("hidden");
+    modal.style.opacity = "0";
+    modal.style.pointerEvents = "none";
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        if (window.__nxReflowMap) window.__nxReflowMap(24);
+      });
+    });
+
+    const waitMap = () => {
+      if (!mapReady) return requestAnimationFrame(waitMap);
+
+      // ✅ 첫 오픈만 250ms, 이후는 0ms
+      const delay = hasOpenedOnce ? 0 : 0;
+
+      setTimeout(() => {
+        modal.style.opacity = "1";
+        modal.style.pointerEvents = "auto";
+
+        requestAnimationFrame(() => fitInstructionsToCard());
+        history.pushState({ arModal: true }, "", location.href);
+
+        hasOpenedOnce = true; // ✅ 여기서 트리거 켜기
+      }, delay);
+    };
+
+    waitMap();
   }
 
   function closeArModal(fromPopstate = false) {
@@ -4592,18 +4627,18 @@ function handleOrientation(event) {
 
 function updateArrow(userLat, userLng, promoLat, promoLng) {
   if (!currentHeading) return;
-  
+
   //console.log(`[GPS] User: ${userLat.toFixed(6)}, ${userLng.toFixed(6)} | Promo: ${promoLat.toFixed(6)}, ${promoLng.toFixed(6)}`);
   const bearingToPromo = getBearing(userLat, userLng, promoLat, promoLng);
 
   let newRotation = bearingToPromo - currentHeading;
   let diff = newRotation - (lastRotation % 360);
-  
+
   if (diff > 180) diff -= 360;
   else if (diff < -180) diff += 360;
-  
+
   lastRotation += diff;
-  
+
   //console.log(`[Logic] Bearing: ${bearingToPromo.toFixed(2)}°, CurrentHeading: ${currentHeading.toFixed(2)}°, FinalRotation: ${rotation.toFixed(2)}°`);
 
   const arrow = document.getElementById("promoArrowImg");
