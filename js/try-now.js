@@ -163,6 +163,7 @@ function visibilityLoop() {
 localStorage.removeItem("caughtSeqs");
 
 function onPermissionNext() {
+   console.log("확인합니다",isRequesting);
   if (isRequesting) return;
 
   const nm = needsMotion();
@@ -245,9 +246,9 @@ function initPermissionScreen() {
   const currentLang = getLang();
   const items = [];
   if (isIOS) {
-    items.push({ id: "markMotion", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.2/img/motion.png", txt: lang[currentLang]["EXP_INFO_MOTION_TITLE"] });
+    items.push({ id: "markMotion", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.3/img/motion.png", txt: lang[currentLang]["EXP_INFO_MOTION_TITLE"] });
   }
-  items.push({ id: "markCamera", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.2/img/camera.png", txt: lang[currentLang]["EXP_INFO_CAMERA_TITLE"] });
+  items.push({ id: "markCamera", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.3/img/camera.png", txt: lang[currentLang]["EXP_INFO_CAMERA_TITLE"] });
 
   items.forEach((item) => {
     const li = document.createElement("li");
@@ -303,9 +304,11 @@ function initPermissionScreen() {
   // 토글 클릭 이벤트
   toggle.addEventListener("click", (e) => {
     e.stopPropagation();
-    console.log("확인합니다1");
     const isOpen = arNoticeList.classList.toggle("open");
   });
+  
+  
+  
 }
 
 function hideScreen(id) {
@@ -596,6 +599,7 @@ async function requestCamera(isAuto) {
     camDenied = true;
     setAuthModalText("CAMERA");
     setFail("mark-camera");
+    hideBottomNotice();
     showBottomNotice(`${lang_RETRY_REQ}`);
     console.error(err);
     saveUserLog("TRY - 카메라권한 거부");
@@ -670,6 +674,7 @@ function showBottomNotice(text) {
 
   document.getElementById("arNotice").style.display = "none";
   document.getElementById("cameraNoticeText").style.display = "none";
+  
 }
 
 function hideBottomNotice() {
@@ -687,6 +692,7 @@ async function loadEvent(isReadyEnd) {
   hideScreen("motionScreen");
   if (isReadyEnd) {
     hideScreen("permissionScreen");
+    hideScreen("tryGameScreen2");
     saveUserLog("TRY - AR 로딩시작");
     initAR();
     return;
@@ -905,7 +911,7 @@ function playGiftSequence() {
     renderer: "svg",
     loop: false,
     autoplay: false,
-    path: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.2/lottie/gift_box.json",
+    path: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.3/lottie/gift_box.json",
   });
 
   giftAnim.addEventListener("DOMLoaded", () => {
@@ -975,7 +981,7 @@ function startTripleSparkles() {
       renderer: "svg",
       loop: false,
       autoplay: false,
-      path: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.2/lottie/fireworks.json",
+      path: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.3/lottie/fireworks.json",
     });
 
     anims.push(anim);
@@ -1420,7 +1426,7 @@ async function startPortalLottie() {
     renderer: "svg",
     loop: false,
     autoplay: true,
-    path: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.2/lottie/portal_ntokozo.json",
+    path: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.3/lottie/portal_ntokozo.json",
   });
 }
 
@@ -1843,7 +1849,7 @@ function buildImgListForMeals(imgs, mealCount) {
 }
 
 async function getMealsForSpawn() {
-  const imgs = ["https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.2/img/token/coin_buddha_statue.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.2/img/token/coin_gold_bar.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.2/img/token/coin_money_1.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.2/img/token/jewel_diamond.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.2/img/token/people_girl_1.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.2/img/token/people_girl_2.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.2/img/token/people_girl_3.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.2/img/token/people_girl_4.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.2/img/token/people_girl_5.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.2/img/token/people_man_1.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.2/img/token/people_man_2.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.2/img/token/people_man_3.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.2/img/token/cosmetics_cream.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.2/img/token/cosmetics_lipstick.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.2/img/token/item_flower.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.2/img/token/car_1.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.2/img/token/item_skeleton.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.2/img/token/drink_americano.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.2/img/token/drink_beer.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.2/img/token/drink_chamisul.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.2/img/token/drink_champagne.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.2/img/token/drink_cocktail_1.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.2/img/token/drink_cocktail_2.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.2/img/token/drink_whiskey.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.2/img/token/drink_wine.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.2/img/token/food_hotdog.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.2/img/token/food_kimbap.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.2/img/token/food_macaron.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.2/img/token/JP_sushi.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.2/img/token/food_watermelon.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.2/img/token/ID_barong_mask.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.2/img/token/ID_garuda.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.2/img/token/IN_elephant.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.2/img/token/IN_lionstatue.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.2/img/token/TH_buddha_statue.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.2/img/token/TH_dragon_sculpture.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.2/img/token/US_route66.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.2/img/token/US_statue_of_liberty.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.2/img/token/VN_conicalhat.png"];
+  const imgs = ["https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.3/img/token/coin_buddha_statue.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.3/img/token/coin_gold_bar.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.3/img/token/coin_money_1.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.3/img/token/jewel_diamond.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.3/img/token/people_girl_1.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.3/img/token/people_girl_2.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.3/img/token/people_girl_3.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.3/img/token/people_girl_4.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.3/img/token/people_girl_5.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.3/img/token/people_man_1.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.3/img/token/people_man_2.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.3/img/token/people_man_3.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.3/img/token/cosmetics_cream.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.3/img/token/cosmetics_lipstick.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.3/img/token/item_flower.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.3/img/token/car_1.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.3/img/token/item_skeleton.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.3/img/token/drink_americano.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.3/img/token/drink_beer.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.3/img/token/drink_chamisul.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.3/img/token/drink_champagne.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.3/img/token/drink_cocktail_1.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.3/img/token/drink_cocktail_2.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.3/img/token/drink_whiskey.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.3/img/token/drink_wine.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.3/img/token/food_hotdog.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.3/img/token/food_kimbap.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.3/img/token/food_macaron.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.3/img/token/JP_sushi.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.3/img/token/food_watermelon.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.3/img/token/ID_barong_mask.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.3/img/token/ID_garuda.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.3/img/token/IN_elephant.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.3/img/token/IN_lionstatue.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.3/img/token/TH_buddha_statue.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.3/img/token/TH_dragon_sculpture.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.3/img/token/US_route66.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.3/img/token/US_statue_of_liberty.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.3/img/token/VN_conicalhat.png"];
 
   if (!USE_MOCK_MEAL) {
     const mealCount = WANT_TOKEN_COUNT;
@@ -2206,7 +2212,7 @@ function animateChange(el) {
   void el.offsetWidth; // reflow로 애니메이션 재시작
   el.classList.add("pop-ar");
 }
-
+/*
 function preloadAudio(id) {
   const audio = document.getElementById(id);
   if (!audio) return;
@@ -2214,3 +2220,355 @@ function preloadAudio(id) {
   audio.preload = "auto"; // none → auto
   audio.load(); // 네트워크 요청 시작
 }
+*/
+function preloadAudio(id) {
+  return new Promise((resolve, reject) => {
+    const audio = document.getElementById(id);
+    if (!audio) {
+      resolve(); // 없으면 그냥 넘어감
+      return;
+    }
+
+    audio.preload = "auto";
+
+    const onReady = () => {
+      audio.removeEventListener("canplaythrough", onReady);
+      resolve();
+    };
+
+    audio.addEventListener("canplaythrough", onReady);
+    audio.load(); // 네트워크 요청 시작
+  });
+}
+
+function _sleep(ms) {
+  return new Promise((r) => setTimeout(r, ms));
+}
+function showOverlay(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  initPermissionScreen();
+  el.classList.remove("hidden");
+  el.style.zIndex = "20000";
+}
+
+function openTryGamePopup() {
+  const popup = document.getElementById("permissionScreen");
+  if (!popup) return;
+
+  const bg = popup.querySelector(".bg-video");
+  if (bg) bg.style.display = "none";
+
+  showOverlay("permissionScreen");
+}
+
+function initTryGameScreen1() {
+  const tokenDiv = document.getElementById("tryGameImgDiv");
+  const guideDiv = document.getElementById("tryGamediv1");
+  if (!tokenDiv || !guideDiv) return;
+
+  tokenDiv.style.display = "none";
+  guideDiv.style.display = "none";
+
+  
+  tokenDiv.addEventListener("click", function (e) {
+	  e.preventDefault();
+	  collectTryGameToken();
+	});
+  
+  
+}
+
+function startTryGameTokenIntro() {
+  const tokenDiv = document.getElementById("tryGameImgDiv");
+  const guideDiv = document.getElementById("tryGamediv1");
+  const arrowDiv = document.getElementById("tryGameArrow1"); // 이미 있음
+  if (!tokenDiv || !guideDiv) return;
+  
+  guideDiv.style.display = "flex";
+
+  if (arrowDiv) arrowDiv.style.display = "none";
+
+  tokenDiv.style.display = "none";
+
+  setTimeout(function () {
+    tokenDiv.style.display = "block";
+    tokenDiv.classList.add("trygame-token-wiggle");
+
+    if (arrowDiv) arrowDiv.style.display = "block";
+    guideDiv.classList.add("trygame-arrow-blink");
+  }, 1000);
+}
+
+async function collectTryGameToken() {
+
+  const tokenDiv = document.getElementById("tryGameImgDiv");
+  const guideDiv = document.getElementById("tryGamediv1");
+  const video1 = document.getElementById("tryGameBgVideo");
+  const sound = document.getElementById("collect-sound");
+ 
+  if (!tokenDiv || !guideDiv) return;
+  if (tokenDiv.classList.contains("trygame-token-collecting")) return;
+  try {
+    var soundOn = true;
+  if (sound && soundOn) {
+      sound.currentTime = 0;
+      await sound.play();
+    }
+
+  
+  } catch(e) {
+    console.log("Sound play failed", e);
+  }
+
+  // 🔴 video play를 다음 frame으로
+  requestAnimationFrame(() => {
+      primeTryGameStep2Video();
+  });
+
+  tokenDiv.classList.remove("trygame-token-wiggle");
+  guideDiv.classList.remove("trygame-arrow-blink");
+
+  tokenDiv.classList.add("trygame-token-collecting");
+
+  tokenDiv.addEventListener(
+    "animationend",
+    function () {
+      tokenDiv.style.display = "none";
+      guideDiv.style.display = "none";
+      saveUserLog("TRY - 체험 1페이지 토큰수집 ");
+      onTryGameTokenCollected();
+    },
+    { once: true }
+  );
+}
+
+function onTryGameTokenCollected() {
+ 
+  goTryGameStep2();
+}
+
+function initTryGameScreen2() {
+  const tokenDiv = document.getElementById("tryGameImgDiv2");
+  const guideDiv = document.getElementById("tryGamediv2");
+  if (!tokenDiv || !guideDiv) return;
+
+  tokenDiv.style.display = "none";
+  guideDiv.style.display = "none";
+
+  tokenDiv.style.pointerEvents = "auto";
+
+  tokenDiv.addEventListener(
+    "pointerdown",
+    function (e) {
+      e.preventDefault();
+      collectTryGameToken2();
+    },
+    { passive: false }
+  );
+}
+
+function startTryGameTokenIntro2() {
+  const tokenDiv = document.getElementById("tryGameImgDiv2");
+  const guideDiv = document.getElementById("tryGamediv2");
+  const arrowDiv = document.getElementById("tryGameArrow2");
+  if (!tokenDiv || !guideDiv) return;
+
+  // ✅ 텍스트는 영상 시작 시 바로
+  guideDiv.style.display = "flex";
+
+  // ✅ 화살표는 나중에
+  if (arrowDiv) arrowDiv.style.display = "none";
+
+  // 토큰은 1초 뒤
+  tokenDiv.style.display = "none";
+
+  setTimeout(function () {
+    tokenDiv.style.display = "block";
+    tokenDiv.classList.add("trygame-token-wiggle");
+
+    if (arrowDiv) arrowDiv.style.display = "block";
+    guideDiv.classList.add("trygame-arrow-blink");
+  }, 500);
+}
+
+function collectTryGameToken2() {
+  const tokenDiv = document.getElementById("tryGameImgDiv2");
+  const guideDiv = document.getElementById("tryGamediv2");
+  const sound = document.getElementById("collect-sound");
+
+  if (!tokenDiv || !guideDiv) return;
+
+  if (tokenDiv.classList.contains("trygame-token-collecting")) return;
+  var soundOn = true;
+  if (sound && soundOn) {
+    sound.currentTime = 0;
+    sound.play().catch((e) => console.log("Sound play failed", e));
+  }
+
+  tokenDiv.classList.remove("trygame-token-wiggle");
+  guideDiv.classList.remove("trygame-arrow-blink");
+
+  tokenDiv.classList.add("trygame-token-collecting");
+
+  tokenDiv.addEventListener(
+    "animationend",
+    function () {
+      tokenDiv.style.display = "none";
+      guideDiv.style.display = "none";
+        saveUserLog("TRY - 체험 2페이지 토큰수집");
+      onTryGameToken2Collected();
+    },
+    { once: true }
+  );
+}
+
+function onTryGameToken2Collected() {
+  openTryGamePopup();
+}
+
+function primeTryGameStep2Video() {
+  const v2 = document.getElementById("tryGameBgVideo2");
+  if (!v2) return;
+
+  if (!v2.src) {
+    v2.src = "./img/trynow_video2_260306.mp4";
+  }
+
+  v2.preload = "auto";
+  v2.muted = true;
+  v2.playsInline = true;
+  v2.setAttribute("playsinline", "");
+
+  const p = v2.play();
+
+  if (p) {
+    p.then(() => {
+      v2.pause();
+      v2.currentTime = 0;
+    }).catch(()=>{});
+  }
+}
+
+async function goTryGameStep2() {
+  const nextBtn = document.getElementById("btn-next");
+  if (nextBtn) nextBtn.disabled = false;
+
+  const s1 = document.getElementById("tryGameScreen1");
+  const s2 = document.getElementById("tryGameScreen2");
+  const v1 = document.getElementById("tryGameBgVideo");
+  const v2 = document.getElementById("tryGameBgVideo2");
+  if (!s1 || !s2 || !v2) return;
+
+  saveUserLog("TRY - 체험 2페이지 진입");
+
+  s2.classList.remove("hidden");
+  s2.style.zIndex = "1002";
+  s1.style.zIndex = "1001";
+  s2.style.opacity = "0";
+  s2.style.pointerEvents = "none";
+
+  v2.preload = "auto";
+  v2.muted = true;
+  v2.playsInline = true;
+  v2.setAttribute("playsinline", "");
+
+  const targetSrc = "./img/trynow_video2_260306.mp4";
+  const needNewSrc = !v2.currentSrc || !v2.currentSrc.includes("trynow_video2_260306.mp4");
+
+  await new Promise((resolve, reject) => {
+    const onReady = () => {
+      cleanup();
+      resolve();
+    };
+
+    const onError = () => {
+      cleanup();
+      reject(new Error("step2 video load failed"));
+    };
+
+    const cleanup = () => {
+      v2.removeEventListener("loadeddata", onReady);
+      v2.removeEventListener("error", onError);
+    };
+
+    // 이미 첫 프레임 준비돼 있으면 바로 통과
+    if (!needNewSrc && v2.readyState >= 2) {
+      resolve();
+      return;
+    }
+
+    v2.addEventListener("loadeddata", onReady, { once: true });
+    v2.addEventListener("error", onError, { once: true });
+
+    // src가 바뀌는 경우에만 새로 load
+    if (needNewSrc) {
+      v2.src = targetSrc;
+      v2.load();
+    } else if (v2.readyState < 2) {
+      // src는 같은데 아직 덜 준비된 경우만 load
+      v2.load();
+    }
+  });
+
+  s2.style.opacity = "1";
+  s2.style.pointerEvents = "auto";
+
+  if (v1) v1.pause();
+
+  try {
+    await v2.play();
+  } catch (e) {
+    const retry = () => {
+      v2.play().finally(() => {
+        window.removeEventListener("touchend", retry);
+        window.removeEventListener("click", retry);
+      });
+    };
+    window.addEventListener("touchend", retry, { once: true });
+    window.addEventListener("click", retry, { once: true });
+  }
+
+  s1.style.opacity = "0";
+  s1.style.pointerEvents = "none";
+
+  initTryGameScreen2();
+  startTryGameTokenIntro2();
+
+  setTimeout(() => {
+    s1.classList.add("hidden");
+  }, 500);
+}
+
+
+function renderVideo(id, src, readyEvent = "canplay") {
+  return new Promise((resolve, reject) => {
+    const video = document.getElementById(id);
+    if (!video) return resolve(null);
+
+    const onReady = () => {
+      cleanup();
+      resolve(video);
+    };
+
+    const onError = () => {
+      console.log("video error", video.error);
+      cleanup();
+      reject(new Error(`video load failed: ${id}`));
+    };
+
+    const cleanup = () => {
+      video.removeEventListener(readyEvent, onReady);
+      video.removeEventListener("error", onError);
+    };
+
+    video.preload = "auto";
+
+    video.addEventListener(readyEvent, onReady, { once: true });
+    video.addEventListener("error", onError, { once: true });
+
+    video.src = src;
+    video.load();
+  });
+}
+
