@@ -2728,7 +2728,7 @@ body.no-scroll {
 
 /* ✅ 맨 아래 '다음' 버튼을 진짜 바닥에 크게 */
 .perm-notice {
-  position: fixed;
+  /* position: fixed; */
   left: 0;
   right: 0;
   bottom: 12px;
@@ -3372,13 +3372,20 @@ body.lang-en .inapp-warning {
   padding: 18px;
 }
 
-.authOverlayBackdrop {
+/* .authOverlayBackdrop {
   position: absolute;
   inset: 0;
   background: rgba(15, 23, 42, 0.55);
+} */
+
+.authOverlayBackdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.55);
+    z-index: 9998;
 }
 
-.authOverlayCard {
+/* .authOverlayCard {
   position: relative;
   width: 92%;
   max-width: 450px;
@@ -3388,7 +3395,23 @@ body.lang-en .inapp-warning {
   box-shadow: var(--shadow);
   overflow: hidden;
   max-height: 90vh;
-  /* padding: 30px; */
+  padding: 30px;
+} */
+
+.authOverlayCard {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    width: 92%;
+    max-width: 450px;
+    max-height: 90vh;
+
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    z-index: 9999;
 }
 
 .authOverlayHeader {
