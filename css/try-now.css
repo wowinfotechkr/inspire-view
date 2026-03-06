@@ -40,6 +40,49 @@
   height: auto;
 }
 
+.try-game-div {
+  position: fixed;
+  bottom: 300px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+  z-index: 998;
+  transition: opacity 0.3s ease;
+  width: calc(100% - 40px);
+}
+
+.try-game-arrow-text {
+  text-align: center;
+  line-height: 1.2;
+  padding: 22px 26px;
+  border-radius: 16px;
+  backdrop-filter: blur(6px);
+  background: rgba(32, 69, 130, 0.35);
+  font-size: 18px;
+  font-weight: 600;
+  color: #fff;
+  border: 2px solid #fff;
+  margin-top: calc(20% - 13px);
+}
+
+.try-game-arrow-div {
+  width: 100px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.1s ease-out;
+}
+
+.try-game-arrow {
+  width: 60px;
+  height: auto;
+}
+
+
 /* 조준 완료 시 투명하게 처리 */
 .on-target {
   opacity: 0;
@@ -2412,6 +2455,17 @@ body.no-scroll {
   object-fit: contain;
 }
 
+#tryGameImgDiv {
+  width: 42vw;
+  max-width: 160px;
+  min-width: 90px;
+
+  height: auto;
+
+  margin-bottom: 24px;
+  object-fit: contain;
+}
+
 .arModalcloseBtn2 {
   all: unset !important;
   display: block !important;
@@ -2564,9 +2618,9 @@ body.no-scroll {
   margin: 0 0 18px;
 }
 
-#permissionScreen {
+/* #permissionScreen {
   background: #f1f5f9;
-}
+} */
 
 .perm-bottom {
   position: fixed;
@@ -3038,8 +3092,8 @@ button {
 }
 
 .fullscreen2 {
-  padding-top: calc(env(safe-area-inset-top) + 20px);
-  padding-bottom: calc(env(safe-area-inset-bottom) + 20px);
+  padding-top: calc(env(safe-area-inset-top) + 10px);
+  padding-bottom: calc(env(safe-area-inset-bottom) + 10px);
   padding-left: 18px;
   padding-right: 18px;
 
@@ -3049,8 +3103,32 @@ button {
   box-sizing: border-box;
   position: fixed;
   inset: 0;
-  z-index: 10000;
+  z-index: 20000;
 }
+
+/* @media (min-height: 700px) {
+  .fullscreen2 {
+    padding-top: calc(env(safe-area-inset-top) + 55px);
+    padding-bottom: calc(env(safe-area-inset-bottom) + 55px);
+  }
+}
+
+@media (min-height: 800px) {
+  .fullscreen2 {
+    padding-top: calc(env(safe-area-inset-top) + 55px);
+    padding-bottom: calc(env(safe-area-inset-bottom) + 55px);
+  }
+} 
+
+@media (min-height: 900px) {
+  .fullscreen2 {
+    padding-top: calc(env(safe-area-inset-top) + 70px);
+    padding-bottom: calc(env(safe-area-inset-bottom) + 70px);
+  }
+}
+*/
+
+
 .frameBody {
   overflow-y: auto; /* ✅ 내부 스크롤 */
   -webkit-overflow-scrolling: touch;
@@ -3634,4 +3712,127 @@ body.lang-en .inapp-warning {
 
 .hidden {
   display: none;
+}
+
+#tryGameImgDiv {
+  position: fixed;
+  left: 50%;
+  top: 35%;
+  transform: translate(-50%, -50%);
+  z-index: 999;         
+  display: none;         
+  pointer-events: auto;  
+  width: 42vw;
+  max-width: 160px;
+  min-width: 90px;
+}
+
+#tryGameImg {
+  width: 100%;
+  height: auto;
+  display: block;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+#tryGamediv1.try-game-div {
+  position: fixed;
+  left: 50%;
+  bottom: 15%; 
+  transform: translateX(-50%);
+  z-index: 998;
+  display: none;       
+  pointer-events: none; 
+  width: calc(100% - 40px);
+  align-items: center;
+}
+
+.trygame-arrow-blink .try-game-arrow-div {
+  animation: trygameArrowBlink 1s ease-in-out infinite;
+}
+
+@keyframes trygameArrowBlink {
+  0%, 100% { opacity: 0.7; transform: translateY(0); }
+  50%      { opacity: 1;    transform: translateY(-4px); }
+}
+
+.trygame-token-wiggle {
+  animation: trygameTokenWiggle 0.85s ease-in-out infinite;
+}
+
+@keyframes trygameTokenWiggle {
+  0%   { transform: translate(-50%, -50%) translateX(0) rotate(0deg); }
+  25%  { transform: translate(-50%, -50%) translateX(-7px) rotate(-2deg); }
+  50%  { transform: translate(-50%, -50%) translateX(7px) rotate(2deg); }
+  75%  { transform: translate(-50%, -50%) translateX(-4px) rotate(-1deg); }
+  100% { transform: translate(-50%, -50%) translateX(0) rotate(0deg); }
+}
+
+.trygame-token-collecting {
+  animation: trygameTokenCollect 0.38s ease-in forwards;
+}
+
+@keyframes trygameTokenCollect {
+  0%   { transform: translate(-50%, -50%) scale(1);   opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(0.0); opacity: 0; }
+}
+
+#tryGameImgDiv2 {
+  position: fixed;
+  left: 50%;
+  top: 35%;
+  transform: translate(-50%, -50%);
+  z-index: 999;
+  display: none;    
+  pointer-events: auto;
+  width: 42vw;
+  max-width: 160px;
+  min-width: 90px;
+}
+
+#tryGameImg2 {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* 화살표+텍스트 컨테이너 (2단계) */
+#tryGamediv2.try-game-div {
+  position: fixed;
+  left: 50%;
+  bottom: 15%;
+  transform: translateX(-50%);
+  z-index: 998;
+  display: none;     
+  pointer-events: none;
+  width: calc(100% - 40px);
+  align-items: center;
+}
+
+.fullscreen { opacity: 1; transition: opacity 150ms ease; }
+.fullscreen.fading { opacity: 0; }
+
+#permissionScreen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#permissionScreen .frame {
+  max-height: 90vh;
+  height: auto;
+}
+
+.frameBody {
+  flex: initial !important;
+  height: auto !important;
+}
+
+#tryGameScreen1,
+#tryGameScreen2,
+#tryGameScreen1 .bg-video,
+#tryGameScreen2 .bg-video,
+#tryGameBgVideo,
+#tryGameBgVideo2 {
+  background: #000 !important;
 }
