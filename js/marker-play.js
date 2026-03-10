@@ -725,8 +725,8 @@ function initPermissionScreen() {
 
   const currentLang = getLang();
   const items = [
-    { id: "markGeo", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.7/img/location.png", txt: lang[currentLang]["PERM_ITEM_LOCATION"] },
-    { id: "markCamera", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.7/img/camera.png", txt: lang[currentLang]["PERM_ITEM_CAMERA"] },
+    { id: "markGeo", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.8/img/location.png", txt: lang[currentLang]["PERM_ITEM_LOCATION"] },
+    { id: "markCamera", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.8/img/camera.png", txt: lang[currentLang]["PERM_ITEM_CAMERA"] },
   ];
   // if (isIOS) {
   //   items.push({ id: "markMotion", img: "../img/motion.png", txt: lang[currentLang]["PERM_ITEM_MOTION"] });
@@ -2694,7 +2694,7 @@ function startPortalLottie() {
     renderer: "svg",
     loop: false, // 🔁 필요에 따라 true/false
     autoplay: true, // 페이지 진입 시 자동재생
-    path: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.7/lottie/portal_ntokozo.json",
+    path: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.8/lottie/portal_ntokozo.json",
   });
 }
 
@@ -3540,7 +3540,7 @@ function playGiftSequence() {
     renderer: "svg",
     loop: false,
     autoplay: false,
-    path: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.7/lottie/gift_box.json",
+    path: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.8/lottie/gift_box.json",
   });
 
   giftAnim.addEventListener("DOMLoaded", () => {
@@ -3610,7 +3610,7 @@ function startTripleSparkles() {
       renderer: "svg",
       loop: false,
       autoplay: false,
-      path: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.7/lottie/fireworks.json",
+      path: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.8/lottie/fireworks.json",
     });
 
     anims.push(anim);
@@ -4868,7 +4868,7 @@ function setArModal() {
   //toggleBtn.addEventListener("click", openArModal);
   toggleBtn.addEventListener("click", function () {
     //20260224- 여기에서 확인
-    //openArModal();
+    openArModal();
     //checkWin();
     /*playScanAnimation(() => {
       hideScannerBox();
