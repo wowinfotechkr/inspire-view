@@ -725,8 +725,8 @@ function initPermissionScreen() {
 
   const currentLang = getLang();
   const items = [
-    { id: "markGeo", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.7/img/location.png", txt: lang[currentLang]["PERM_ITEM_LOCATION"] },
-    { id: "markCamera", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.7/img/camera.png", txt: lang[currentLang]["PERM_ITEM_CAMERA"] },
+    { id: "markGeo", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.7/img/location.png", txt: lang[currentLang]["PERM_ITEM_LOCATION"] },
+    { id: "markCamera", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.7/img/camera.png", txt: lang[currentLang]["PERM_ITEM_CAMERA"] },
   ];
   // if (isIOS) {
   //   items.push({ id: "markMotion", img: "../img/motion.png", txt: lang[currentLang]["PERM_ITEM_MOTION"] });
@@ -1233,6 +1233,8 @@ async function loadEvent(isReadyEnd) {
       startBoxImg2.src = imgUrlCheck;
       var promoCornerImg2 = document.getElementById("promoCornerImg2");
       promoCornerImg2.src = imgUrlCheck;
+      var markerImg = document.getElementById("markerImg");
+      markerImg.src = imgUrlCheck;
 
       // ✅ 반드시 await
       console.log("eventIsOpen()");
@@ -1364,10 +1366,10 @@ function setInfoMap() {
   }
 
   if (typeof address !== "undefined" && address) {
-     //주소가 준비되면 스켈레톤 숨기고 실제 주소 보여주기
+    //주소가 준비되면 스켈레톤 숨기고 실제 주소 보여주기
     addrPlaceholder.style.display = "none";
-     addrInfo.style.display = "block";
-     addrInfo.textContent = address;
+    addrInfo.style.display = "block";
+    addrInfo.textContent = address;
   }
 
   // 4. 확인 버튼 (기존 onConfirm)
@@ -1577,7 +1579,7 @@ function initMap(lat, lng, radius, img, { fit = "width", padding = 24 } = {}) {
     pendingInit = () => initMap(lat, lng, radius, img, { fit, padding });
     return;
   }
-  
+
   const center = new google.maps.LatLng(lat, lng);
   const mapEl = document.getElementById("global-map-new");
 
@@ -1988,7 +1990,9 @@ function closeCouponPopup() {
   const ctx = canvas.getContext("2d");
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  isProcessing = false;
+  setTimeout(function () {
+    isProcessing = false;
+  }, 1000);
   showScannerBox();
 }
 
@@ -2690,7 +2694,7 @@ function startPortalLottie() {
     renderer: "svg",
     loop: false, // 🔁 필요에 따라 true/false
     autoplay: true, // 페이지 진입 시 자동재생
-    path: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.7/lottie/portal_ntokozo.json",
+    path: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.7/lottie/portal_ntokozo.json",
   });
 }
 
@@ -2808,8 +2812,8 @@ function checkWin() {
   console.log("cStore:" + cStore);
   console.log("cCode:" + cCode);
 
-  if (isProcessing) return;
-  isProcessing = true;
+  //if (isProcessing) return;
+  //isProcessing = true;
 
   fetch("/m-win-check.do?memberid=" + memberid + "&brandcd=" + cBrand + "&storecd=" + cStore + "&campcd=" + cCode)
     .then((response) => {
@@ -2854,6 +2858,37 @@ function checkWin() {
     });
 }
 
+let isTargetVisible = false; // 마커 감지 상태
+
+function scannerCheckStart() {
+  if (!AFRAME.components["scanner-check"]) {
+    AFRAME.registerComponent("scanner-check", {
+      tick: function () {
+        // 마커가 보이고, 아직 처리 중이 아닐 때만 체크
+        if (typeof isTargetVisible !== "undefined" && isTargetVisible && !isProcessing) {
+          // 기존에 작성했던 체크 조건들
+          const gpsLoading = document.getElementById("gpsLoading");
+          const isGpsVisible = gpsLoading && window.getComputedStyle(gpsLoading).display !== "none";
+
+          if (!isInside || isGpsVisible || (typeof isStartOverlayVisible === "function" && isStartOverlayVisible())) return;
+
+          // 중앙 좌표 체크 (이전에 만든 함수)
+          if (isMarkerInScannerBox(document.getElementById("ar-target"))) {
+            isProcessing = true;
+
+            if (typeof playScanAnimation === "function") {
+              playScanAnimation(() => {
+                //hideScannerBox();
+                checkWin();
+              });
+            }
+          }
+        }
+      },
+    });
+  }
+}
+
 function initAR() {
   console.log("initAR");
   setMemberid();
@@ -2879,11 +2914,14 @@ function initAR() {
   const tMindUrl = `https://view-admin.beyondt.net/uploaded?fileName=${targetImgUrl}`;
   console.log("tMindUrl:" + tMindUrl);
 
+  scannerCheckStart();
+
   const arScene = document.createElement("a-scene");
   arScene.setAttribute("id", "scene");
   arScene.setAttribute("mindar-image", `imageTargetSrc: ${tMindUrl}; uiLoading: no; uiScanning: no;`);
   arScene.setAttribute("xr-mode-ui", "enabled: false");
   arScene.setAttribute("device-orientation-permission-ui", "enabled: false");
+  arScene.setAttribute("scanner-check", "");
 
   const camera = document.createElement("a-camera");
   camera.setAttribute("position", "0 0 0");
@@ -2905,7 +2943,18 @@ function initAR() {
     if (isVisible) return;
     if (isStartOverlayVisible()) return;
 
-    checkWin();
+    isTargetVisible = true;
+
+    /*if (isProcessing) return;
+    isProcessing = true;
+    playScanAnimation(() => {
+      hideScannerBox();
+      checkWin();
+    });*/
+  });
+
+  target.addEventListener("targetLost", () => {
+    isTargetVisible = false;
   });
 
   arScene.addEventListener("loaded", () => {
@@ -2947,6 +2996,252 @@ function initAR() {
   document.querySelector("#progressWrap").style.visibility = "visible";
   setTimeout(() => {}, 1000);
   currentPositionLoad();
+}
+
+function isMarkerInScannerBox(targetEl) {
+  const sceneEl = document.querySelector("a-scene");
+  const camera = sceneEl.camera;
+  const targetObj = targetEl.object3D;
+
+  if (!camera || !targetObj) return false;
+
+  const vector = new THREE.Vector3();
+  targetObj.getWorldPosition(vector);
+  vector.project(camera);
+
+  // 화면의 가로/세로 좌표 계산
+  const x = (vector.x * 0.5 + 0.5) * window.innerWidth;
+  const y = (-vector.y * 0.5 + 0.5) * window.innerHeight;
+
+  const centerX = window.innerWidth / 2;
+  const centerY = window.innerHeight / 2;
+
+  // ⭐ 더 중앙에 집중하게 하려면 이 값을 조절하세요.
+  // window.innerWidth * 0.15 는 화면 너비의 15% 영역 안에 들어와야 한다는 뜻입니다.
+  const marginX = window.innerWidth * 0.15;
+  const marginY = window.innerHeight * 0.15;
+
+  // 중앙에 왔는지 체크
+  const isCentered = Math.abs(x - centerX) < marginX && Math.abs(y - centerY) < marginY;
+
+  // vector.z < 1 은 카메라 앞에 있다는 뜻입니다.
+  return isCentered && vector.z < 1;
+}
+
+function getCameraVideo() {
+  const videos = document.querySelectorAll("video");
+  return videos[videos.length - 1];
+}
+
+function captureScanArea() {
+  const video = getCameraVideo();
+  const scanner = document.getElementById("scanner-box");
+
+  const videoRect = video.getBoundingClientRect();
+  const scanRect = scanner.getBoundingClientRect();
+
+  const scaleX = video.videoWidth / videoRect.width;
+  const scaleY = video.videoHeight / videoRect.height;
+
+  const sx = (scanRect.left - videoRect.left) * scaleX;
+  const sy = (scanRect.top - videoRect.top) * scaleY;
+  const sw = scanRect.width * scaleX;
+  const sh = scanRect.height * scaleY;
+
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d");
+
+  canvas.width = scanRect.width;
+  canvas.height = scanRect.height;
+
+  ctx.drawImage(video, sx, sy, sw, sh, 0, 0, canvas.width, canvas.height);
+
+  return canvas.toDataURL("image/png");
+}
+
+function playScanAnimation(callback) {
+  const target = document.getElementById("ar-target");
+  const rect = getMarkerScreenRect(target);
+  const imgSrc = captureMarkerArea(target);
+
+  if (!rect || !imgSrc) {
+    callback();
+    return;
+  }
+
+  const overlay = document.createElement("div");
+  overlay.id = "scan-zoom";
+
+  // 1. 초기 상태 (마커 위치)
+  Object.assign(overlay.style, {
+    position: "fixed",
+    left: rect.x + "px",
+    top: rect.y + "px",
+    width: rect.width + "px",
+    height: rect.height + "px",
+    zIndex: "9999",
+    transform: "translate(0, 0)",
+    transition: "all 0.6s cubic-bezier(0.25, 1, 0.5, 1)", // 확인 끝나면 0.6s로 복구
+    opacity: "1",
+  });
+
+  const img = document.createElement("img");
+  img.src = imgSrc;
+  overlay.appendChild(img);
+
+  const progress = document.createElement("div");
+  progress.id = "scan-progress";
+  progress.innerText = "0%";
+
+  overlay.appendChild(progress);
+
+  const grid = document.createElement("div");
+  grid.id = "scan-grid";
+  overlay.appendChild(grid);
+
+  const targetUI = document.createElement("div");
+  targetUI.id = "scan-target";
+  targetUI.innerHTML = `
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="corner bl"></div>
+  <div class="corner br"></div>
+`;
+  overlay.appendChild(targetUI);
+
+  document.body.appendChild(overlay);
+
+  void overlay.offsetWidth; // 리플로우 강제
+
+  let progressTimer = null;
+  let p = 0;
+
+  // 2. 중앙 이동 및 확대
+  setTimeout(() => {
+    // 크기를 화면 짧은 쪽의 80%로 설정 (충분히 커짐)
+    const finalSize = Math.min(window.innerWidth, window.innerHeight) * 0.8;
+
+    overlay.classList.add("zoom");
+    overlay.style.left = "50%";
+    overlay.style.top = "50%";
+    overlay.style.width = finalSize + "px";
+    overlay.style.height = finalSize + "px";
+    overlay.style.transform = "translate(-50%, -50%)"; // 정중앙 보정 핵심
+  }, 250);
+
+  setTimeout(() => {
+    hideScannerBox();
+    overlay.classList.add("scan");
+  }, 700);
+
+  setTimeout(() => {
+    overlay.classList.add("analyze");
+
+    const el = overlay.querySelector("#scan-progress");
+    if (el) el.innerText = "Analyzing 0%";
+
+    progressTimer = setInterval(() => {
+      p += Math.floor(Math.random() * 12) + 2; // 2~5 증가
+      if (p > 97) p = 97;
+
+      const el = overlay.querySelector("#scan-progress");
+      if (el) el.innerText = `Analyzing ${p}%`;
+    }, 80);
+  }, 1100);
+
+  setTimeout(() => {
+    overlay.classList.add("lock");
+
+    const el = overlay.querySelector("#scan-progress");
+    if (el) el.innerText = "Analyzing 100%";
+
+    if (progressTimer) clearInterval(progressTimer);
+  }, 2000);
+
+  setTimeout(() => {
+    overlay.classList.add("flash");
+  }, 2300);
+
+  // 3. 종료 타이밍 (애니메이션이 다 끝나고 사라지게 2초 정도로 변경)  
+  setTimeout(() => {
+    overlay.style.opacity = "0";
+    overlay.style.transition = "opacity 0.4s";
+    setTimeout(() => {
+      overlay.remove();
+      callback();
+    }, 400);
+  }, 3000);
+}
+
+function getMarkerScreenRect(targetEl) {
+  const sceneEl = document.querySelector("a-scene");
+  const camera = sceneEl.camera;
+  const obj = targetEl.object3D;
+
+  if (!camera || !obj) return null;
+
+  camera.updateMatrixWorld();
+
+  obj.updateMatrixWorld(true);
+
+  // ⭐ 실제 마커 크기
+  const scale = obj.scale;
+  const halfW = scale.x / 2;
+  const halfH = scale.y / 2;
+
+  const corners = [new THREE.Vector3(-halfW, -halfH, 0), new THREE.Vector3(halfW, -halfH, 0), new THREE.Vector3(halfW, halfH, 0), new THREE.Vector3(-halfW, halfH, 0)];
+
+  const points = corners.map((corner) => {
+    const world = corner.clone().applyMatrix4(obj.matrixWorld);
+    const screen = world.project(camera);
+
+    return {
+      x: (screen.x * 0.5 + 0.5) * window.innerWidth,
+      y: (-screen.y * 0.5 + 0.5) * window.innerHeight,
+    };
+  });
+
+  const xs = points.map((p) => p.x);
+  const ys = points.map((p) => p.y);
+
+  const minX = Math.min(...xs);
+  const maxX = Math.max(...xs);
+  const minY = Math.min(...ys);
+  const maxY = Math.max(...ys);
+
+  return {
+    x: minX,
+    y: minY,
+    width: maxX - minX,
+    height: maxY - minY,
+  };
+}
+
+function captureMarkerArea(targetEl) {
+  const rect = getMarkerScreenRect(targetEl);
+  if (!rect) return null;
+
+  const video = getCameraVideo();
+  const videoRect = video.getBoundingClientRect();
+
+  const ratioX = video.videoWidth / videoRect.width;
+  const ratioY = video.videoHeight / videoRect.height;
+
+  const sx = (rect.x - videoRect.left) * ratioX;
+  const sy = (rect.y - videoRect.top) * ratioY;
+
+  const sw = rect.width * ratioX;
+  const sh = rect.height * ratioY;
+
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d");
+
+  canvas.width = sw;
+  canvas.height = sh;
+
+  ctx.drawImage(video, sx, sy, sw, sh, 0, 0, sw, sh);
+
+  return canvas.toDataURL("image/png");
 }
 
 function currentPositionLoad() {
@@ -3245,7 +3540,7 @@ function playGiftSequence() {
     renderer: "svg",
     loop: false,
     autoplay: false,
-    path: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.7/lottie/gift_box.json",
+    path: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.7/lottie/gift_box.json",
   });
 
   giftAnim.addEventListener("DOMLoaded", () => {
@@ -3315,7 +3610,7 @@ function startTripleSparkles() {
       renderer: "svg",
       loop: false,
       autoplay: false,
-      path: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.1.7/lottie/fireworks.json",
+      path: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.7/lottie/fireworks.json",
     });
 
     anims.push(anim);
@@ -3380,7 +3675,10 @@ function showNoCouponAlert() {
   const panel = document.getElementById("resultPanel");
   const message = document.getElementById("resultMessage");
 
-  message.innerHTML = `${lang_COUPON_NO_GET}<br>`;
+  const currentLang = getLang();
+  const waitTime = formatWaitTime(currentLang, arEventInfo.eventRetryMin);
+
+  message.innerHTML = `${lang_COUPON_NO_GET}<br>(${lang_COUPON_WAIT1}${waitTime}${lang_COUPON_WAIT2})<br>`;
   panel.classList.remove("win", "lose");
   panel.classList.add("lose");
 
@@ -4065,9 +4363,9 @@ function fetchCount_Randomized(state) {
 }
 
 function setInfoMapNew(address, eventInfoDateto, eventInfoDatefrom, eventInfoAmt, eventInfoAmtSymbol, eventInfoReward, retryMin) {
-    console.log("setInfoMapNew 확인")
+  console.log("setInfoMapNew 확인");
   if (typeof initMap === "function") {
-    console.log("initMap 확인")
+    console.log("initMap 확인");
     initMap(eventGpsx, eventGpsy, eventRadius, eventImg);
   }
   const eventDateEl = document.getElementById("event-date");
@@ -4491,7 +4789,7 @@ function setArModal() {
   window.openPromEndOverlay2 = openPromEndOverlay2;
   window.closePromEndOverlay2 = closePromEndOverlay2;
   window.openPromEndOverlay2For = openPromEndOverlay2For;
-/*
+  /*
   function openArModal() {
     if (isArModalOpen) return;
     isArModalOpen = true;
@@ -4504,7 +4802,7 @@ function setArModal() {
     //modal.style.pointerEvents = "none";
   }
   */
-  
+
   function openArModal() {
     if (isArModalOpen) return;
 
@@ -4570,8 +4868,12 @@ function setArModal() {
   //toggleBtn.addEventListener("click", openArModal);
   toggleBtn.addEventListener("click", function () {
     //20260224- 여기에서 확인
-    openArModal();
+    //openArModal();
     //checkWin();
+    /*playScanAnimation(() => {
+      hideScannerBox();
+      checkWin();
+    });*/
   });
   closeBtn.addEventListener("click", () => closeArModal(false));
   backdrop.addEventListener("click", () => closeArModal(false));
@@ -4650,11 +4952,12 @@ function updateArrow(userLat, userLng, promoLat, promoLng) {
   }
 }
 
-function formatWaitTime(currentLang, min) {
-  if (!min || min <= 0) return "";
+function formatWaitTime(currentLang, sec) {
+  if (!sec || sec <= 0) return "";
 
-  const hours = Math.floor(min / 60);
-  const minutes = min % 60;
+  const hours = Math.floor(sec / 3600);
+  const minutes = Math.floor((sec % 3600) / 60);
+  const seconds = sec % 60;
 
   const isOne = (n) => n === 1;
 
@@ -4662,44 +4965,55 @@ function formatWaitTime(currentLang, min) {
     case "ko":
       if (hours && minutes) return `${hours}시간 ${minutes}분`;
       if (hours) return `${hours}시간`;
-      return `${minutes}분`;
+      if (minutes) return `${minutes}분`;
+      return `${seconds}초`;
 
     case "en":
       if (hours && minutes) return `${hours} ${isOne(hours) ? "hour" : "hours"} ${minutes} ${isOne(minutes) ? "minute" : "minutes"}`;
       if (hours) return `${hours} ${isOne(hours) ? "hour" : "hours"}`;
-      return `${minutes} ${isOne(minutes) ? "minute" : "minutes"}`;
+      if (minutes) return `${minutes} ${isOne(minutes) ? "minute" : "minutes"}`;
+      return `${seconds} ${isOne(seconds) ? "second" : "seconds"}`;
 
     case "ja":
       if (hours && minutes) return `${hours}時間${minutes}分`;
       if (hours) return `${hours}時間`;
-      return `${minutes}分`;
+      if (minutes) return `${minutes}分`;
+      return `${seconds}秒`;
 
     case "th":
       if (hours && minutes) return `${hours} ชั่วโมง ${minutes} นาที`;
       if (hours) return `${hours} ชั่วโมง`;
-      return `${minutes} นาที`;
+      if (minutes) return `${minutes} นาที`;
+      return `${seconds} วินาที`;
 
     case "es":
       if (hours && minutes) return `${hours} ${isOne(hours) ? "hora" : "horas"} ${minutes} ${isOne(minutes) ? "minuto" : "minutos"}`;
       if (hours) return `${hours} ${isOne(hours) ? "hora" : "horas"}`;
-      return `${minutes} ${isOne(minutes) ? "minuto" : "minutos"}`;
+      if (minutes) return `${minutes} ${isOne(minutes) ? "minuto" : "minutos"}`;
+      return `${seconds} ${isOne(seconds) ? "segundo" : "segundos"}`;
 
     case "vi":
       if (hours && minutes) return `${hours} giờ ${minutes} phút`;
       if (hours) return `${hours} giờ`;
-      return `${minutes} phút`;
+      if (minutes) return `${minutes} phút`;
+      return `${seconds} giây`;
 
     case "pt":
       if (hours && minutes) return `${hours} ${isOne(hours) ? "hora" : "horas"} ${minutes} ${isOne(minutes) ? "minuto" : "minutos"}`;
       if (hours) return `${hours} ${isOne(hours) ? "hora" : "horas"}`;
-      return `${minutes} ${isOne(minutes) ? "minuto" : "minutos"}`;
+      if (minutes) return `${minutes} ${isOne(minutes) ? "minuto" : "minutos"}`;
+      return `${seconds} ${isOne(seconds) ? "segundo" : "segundos"}`;
 
     case "km":
       if (hours && minutes) return `${hours} ម៉ោង ${minutes} នាទី`;
       if (hours) return `${hours} ម៉ោង`;
-      return `${minutes} នាទី`;
+      if (minutes) return `${minutes} នាទី`;
+      return `${seconds} វិនាទី`;
 
     default:
-      return `${min} min`;
+      if (hours && minutes) return `${hours}h ${minutes}m`;
+      if (hours) return `${hours}h`;
+      if (minutes) return `${minutes}m`;
+      return `${seconds}s`;
   }
 }
