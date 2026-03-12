@@ -1,0 +1,268 @@
+:root {
+  --brand-red: #db4a2b; /* 포인트 컬러 */
+  --dark-bg: #2b2b2b; /* 메인 어두운 배경 */
+  --dark-sub: #1e1e1e; /* 더 깊은 배경 (카드/헤더) */
+  --light-text: #f1efea; /* 밝은 텍스트 */
+  --sub-text: #e4e2dd; /* 서브 텍스트 */
+  --glass-white: rgba(241, 239, 234, 0.05);
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family:
+    "Pretendard",
+    -apple-system,
+    BlinkMacSystemFont,
+    system-ui,
+    Roboto,
+    sans-serif;
+  background-color: var(--dark-bg);
+  color: var(--light-text);
+  overflow-x: hidden;
+  line-height: 1.6;
+  overflow: auto;
+}
+
+/* 상단 헤더 */
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(219, 74, 43, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(219, 74, 43, 0.2);
+  z-index: 1000;
+  cursor: pointer;
+}
+
+.logo {
+  font-size: 1.4rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: var(--brand-red);
+  text-transform: uppercase;
+}
+
+.btn-top {
+  color: #fff;
+  font-size: 1.1rem;
+  transition: 0.3s;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.btn-top:hover {
+  transform: translateY(-3px);
+  filter: brightness(1.1);
+}
+
+/* 메인 섹션 */
+main {
+  margin-top: 80px;
+}
+
+.hero {
+  padding: 40px 20px;
+  text-align: center;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+h1 {
+  font-size: 2.2rem;
+  line-height: 1.3;
+  margin-bottom: 25px;
+  font-weight: 800;
+  color: var(--light-text);
+  word-break: keep-all;
+}
+
+.sub-text {
+  color: var(--sub-text);
+  font-size: 1.1rem;
+  margin-bottom: 30px;
+  opacity: 0.9;
+  word-break: keep-all;
+}
+
+.app-title {
+  font-size: 2.5rem;
+  line-height: 1.3;
+  margin-bottom: 36px;
+  font-weight: 800;
+  color: var(--light-text);
+  word-break: keep-all;
+}
+
+/* 버튼 스타일 */
+.btn-install {
+  display: inline-block;
+  padding: 18px 40px;
+  background: var(--brand-red);
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  transition: 0.3s;
+  box-shadow: 0 4px 20px rgba(219, 74, 43, 0.4);
+  margin-bottom: 50px;
+  cursor: pointer;
+}
+
+.btn-install:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(219, 74, 43, 0.6);
+  filter: brightness(1.1);
+}
+
+/* 비디오 컨테이너 */
+.video-container {
+  position: relative;
+  max-width: 450px; 
+  margin: 40px auto; /* 중앙 정렬 유지 */
+  border: 2px solid rgba(219, 74, 43, 0.3);
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
+  border-radius: 24px;
+  overflow: hidden;
+  background: #000;
+}
+
+/* 스캐너 가이드 효과 */
+.scanner-label {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  background: var(--brand-red);
+  color: #fff;
+  padding: 6px 12px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  z-index: 3;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
+    box-shadow: 0 0 10px var(--brand-red);
+  }
+  100% {
+    opacity: 0.8;
+  }
+}
+
+video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* 기능 카드 */
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  padding: 0px 20px 60px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.card {
+  background: var(--dark-sub);
+  padding: 40px;
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: 0.4s;
+  text-align: left;
+}
+
+.card:hover {
+  border-color: var(--brand-red);
+  transform: translateY(-10px);
+  background: rgba(219, 74, 43, 0.05);
+}
+
+.card i {
+  font-size: 2rem;
+  color: var(--brand-red);
+  margin-bottom: 25px;
+}
+
+.card h3 {
+  margin-top: 0;
+  font-size: 1.4rem;
+  color: var(--light-text);
+  margin-bottom: 15px;
+}
+
+.card p {
+  font-size: 1rem;
+  color: var(--sub-text);
+  margin-bottom: 0;
+  opacity: 0.8;
+}
+
+/* 하단 CTA 섹션 */
+.cta-section {
+  background-color: var(--dark-sub);
+  padding: 60px 20px;
+  text-align: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.cta-section h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  word-break: keep-all;
+}
+
+.store-badges {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.store-badges img {
+  height: 48px;
+  transition: 0.3s;
+  filter: grayscale(0.2);
+  cursor: pointer;
+}
+
+.store-badges img:hover {
+  filter: grayscale(0);
+  transform: scale(1.05);
+}
+
+@media (max-width: 600px) {
+  h1 {
+    font-size: 1.8rem;
+  }
+  .btn-install {
+    width: 85%;
+    box-sizing: border-box;
+  }
+  .card {
+    padding: 30px;
+  }  
+  .video-container {
+    max-width: 90%;
+    margin: 20px auto;
+  }
+}
