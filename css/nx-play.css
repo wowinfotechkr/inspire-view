@@ -4033,6 +4033,12 @@ body.lang-en .inapp-warning {
   width: 100%;
   height: 100%;
 }
+#gift-lottie {
+  transition: opacity 0.5s ease;
+}
+#gift-lottie.fade-out {
+  opacity: 0;
+}
 #sparkle-lottie {
   transform: scale(2.2);
 }
