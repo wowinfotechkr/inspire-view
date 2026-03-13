@@ -725,8 +725,8 @@ function initPermissionScreen() {
 
   const currentLang = getLang();
   const items = [
-    { id: "markGeo", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.8/img/location.png", txt: lang[currentLang]["PERM_ITEM_LOCATION"] },
-    { id: "markCamera", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.8/img/camera.png", txt: lang[currentLang]["PERM_ITEM_CAMERA"] },
+    { id: "markGeo", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.0/img/location.png", txt: lang[currentLang]["PERM_ITEM_LOCATION"] },
+    { id: "markCamera", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.0/img/camera.png", txt: lang[currentLang]["PERM_ITEM_CAMERA"] },
   ];
   // if (isIOS) {
   //   items.push({ id: "markMotion", img: "../img/motion.png", txt: lang[currentLang]["PERM_ITEM_MOTION"] });
@@ -2694,7 +2694,7 @@ function startPortalLottie() {
     renderer: "svg",
     loop: false, // 🔁 필요에 따라 true/false
     autoplay: true, // 페이지 진입 시 자동재생
-    path: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.8/lottie/portal_ntokozo.json",
+    path: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.0/lottie/portal_ntokozo.json",
   });
 }
 
@@ -3533,6 +3533,7 @@ function playGiftSequence() {
 
   giftOverlay.classList.remove("hidden");
   giftContainer.classList.remove("hidden");
+  giftContainer.classList.remove("fade-out");
   sparkleContainer.classList.add("hidden");
 
   giftAnim = lottie.loadAnimation({
@@ -3540,7 +3541,7 @@ function playGiftSequence() {
     renderer: "svg",
     loop: false,
     autoplay: false,
-    path: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.8/lottie/gift_box.json",
+    path: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.0/lottie/gift_box.json",
   });
 
   giftAnim.addEventListener("DOMLoaded", () => {
@@ -3552,11 +3553,16 @@ function playGiftSequence() {
       giftAnim.playSegments([0, 15], true);
       return;
     }
-
-    giftContainer.classList.add("hidden");
-    sparkleContainer.classList.remove("hidden");
-    //sparkleAnim.goToAndPlay(0, true);
-    startTripleSparkles();
+    
+    setTimeout(function() {
+      giftContainer.classList.add("fade-out");
+    }, 1000)
+    
+    setTimeout(function() {
+      giftContainer.classList.add("hidden");
+    }, 1500)
+    //sparkleContainer.classList.remove("hidden");    
+    //startTripleSparkles();
   });
 
   giftContainer.onclick = () => {
@@ -3572,6 +3578,9 @@ function playGiftSequence() {
       sound.currentTime = 0; // 사운드가 씹히지 않게 초기화 후 재생
       sound.play().catch((e) => console.log("Sound play failed", e));
     }
+    
+    sparkleContainer.classList.remove("hidden");    
+    startTripleSparkles();
   };
 }
 
@@ -3610,7 +3619,7 @@ function startTripleSparkles() {
       renderer: "svg",
       loop: false,
       autoplay: false,
-      path: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.2.8/lottie/fireworks.json",
+      path: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.0/lottie/fireworks.json",
     });
 
     anims.push(anim);
@@ -4869,6 +4878,7 @@ function setArModal() {
   toggleBtn.addEventListener("click", function () {
     //20260224- 여기에서 확인
     openArModal();
+    //playGiftSequence(() => showCouponAlert());
     //checkWin();
     /*playScanAnimation(() => {
       hideScannerBox();
