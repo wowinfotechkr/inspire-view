@@ -717,11 +717,11 @@ function initPermissionScreen() {
 
   const currentLang = getLang();
   const items = [
-    { id: "markGeo", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.0/img/location.png", txt: lang[currentLang]["PERM_ITEM_LOCATION"] },
-    { id: "markCamera", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.0/img/camera.png", txt: lang[currentLang]["PERM_ITEM_CAMERA"] },
+    { id: "markGeo", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.1/img/location.png", txt: lang[currentLang]["PERM_ITEM_LOCATION"] },
+    { id: "markCamera", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.1/img/camera.png", txt: lang[currentLang]["PERM_ITEM_CAMERA"] },
   ];
   if (isIOS) {
-    items.push({ id: "markMotion", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.0/img/motion.png", txt: lang[currentLang]["PERM_ITEM_MOTION"] });
+    items.push({ id: "markMotion", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.1/img/motion.png", txt: lang[currentLang]["PERM_ITEM_MOTION"] });
   }
 
   items.forEach((item) => {
@@ -2708,7 +2708,7 @@ function startPortalLottie() {
     renderer: "svg",
     loop: false, // 🔁 필요에 따라 true/false
     autoplay: true, // 페이지 진입 시 자동재생
-    path: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.0/lottie/portal_ntokozo.json",
+    path: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.1/lottie/portal_ntokozo.json",
   });
 }
 
@@ -3169,7 +3169,7 @@ function playGiftSequence() {
     renderer: "svg",
     loop: false,
     autoplay: false,
-    path: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.0/lottie/gift_box.json",
+    animationData: giftJson,
   });
 
  
@@ -3249,7 +3249,7 @@ function startTripleSparkles() {
     renderer: "svg",
     loop: false,
     autoplay: false,
-    path: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.0/lottie/fireworks.json",
+    animationData: fireworksJson,
   });
 
   anims.push(anim);
@@ -4450,4 +4450,9 @@ function preloadAudio(id) {
 
   audio.preload = "auto"; // none → auto
   audio.load(); // 네트워크 요청 시작
+}
+
+async function preloadLottie() {
+  giftJson = await fetch("https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.1/lottie/gift_box.json").then(r => r.json());
+  fireworksJson = await fetch("https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.1/lottie/fireworks.json").then(r => r.json());
 }
