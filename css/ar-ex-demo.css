@@ -2656,7 +2656,7 @@ body.no-scroll {
   font-weight: 700;
   line-height: 1.4;
   word-break: keep-all;
-  margin-bottom: 15px;
+  /* margin-bottom: 15px; */
 }
 
 /* ❗ 여기서 fixed 제거 */
@@ -3709,4 +3709,8 @@ button {
   transition: background-color 0.3s ease;
   justify-content: center; 
   align-items: center; 
+}
+
+#refreshNoticeText{
+	margin-top: 15px;
 }

@@ -2746,7 +2746,7 @@ body.no-scroll {
   font-weight: 700;
   line-height: 1.4;
   word-break: keep-all;
-  margin-bottom: 15px;
+ /*  margin-bottom: 15px; */
 }
 
 /* ❗ 여기서 fixed 제거 */
@@ -3931,4 +3931,7 @@ body.lang-en .inapp-warning {
   align-items: center; 
 }
 
+#refreshNoticeText{
+	margin-top: 15px;
+}
 
