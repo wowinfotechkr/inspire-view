@@ -363,10 +363,10 @@ function initPermissionScreenForFacebook() {
 	if(isIOS){
 	    text2 = lang[currentLang]["FACEBOOK_INAPP_INFO_TEXT2_ios"]
 		//facebooksrc = "/TRY-NOW/img/facebook_info_ios_img_"+currentLang.toLowerCase()+".png";
-		facebooksrc = "/TRY-NOW/img/facebook_info_ios_img_en.jpg";
+		facebooksrc = "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.2/img/facebook_info_ios_img_en.jpg";
 	}else{
 	    text2 = lang[currentLang]["FACEBOOK_INAPP_INFO_TEXT2"]
-		facebooksrc = "/TRY-NOW/img/facebook_info_and_img_"+currentLang.toLowerCase()+".jpg";
+		facebooksrc = "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.2/img/facebook_info_and_img_"+currentLang.toLowerCase()+".jpg";
 	}
 	list.innerHTML = `
 	  <div class="perm-top-box">
