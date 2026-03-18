@@ -2775,7 +2775,7 @@ button {
   display: flex;
   flex-direction: column; /* ⭐ 핵심 */
   gap: 10px; /* 텍스트와 버튼 사이 간격 */
-  align-items: center;
+  align-items: left;
 }
 
 .perm-notice-text {
@@ -3627,4 +3627,66 @@ body.lang-en .inapp-warning {
 }
 #sparkle-lottie {
   transform: scale(2.2);
+}
+
+
+
+.refresh-notice {
+  /* position: fixed; */
+  left: 0;
+  right: 0;
+  bottom: 12px;
+  padding: 0px 24px 0px 24px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px; 
+  align-items: center;
+}
+
+.refresh-notice-text {
+  color: #ef4444;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.4;
+  word-break: keep-all;
+  margin-bottom: 5px;
+}
+
+/* ❗ 여기서 fixed 제거 */
+.refresh-notice-btn {
+  border: 0;
+  width: 45px;
+  height: 45px;
+  border-radius: 8px;
+  background-color: #1976d2;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+}
+
+#refreshBtnDiv.refresh-rounded-button {
+  width: 100%;
+  height: 56px;
+  border-radius: 16px;
+}
+
+.refresh-rounded-button {
+  /* display: inline-block; */
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #1976d2;
+  border: 2px solid #1976d2;
+  background: white;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+  justify-content: center; 
+  align-items: center; 
 }
