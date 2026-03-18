@@ -363,10 +363,10 @@ function initPermissionScreenForFacebook() {
 	if(isIOS){
 	    text2 = lang[currentLang]["FACEBOOK_INAPP_INFO_TEXT2_ios"]
 		//facebooksrc = "/TRY-NOW/img/facebook_info_ios_img_"+currentLang.toLowerCase()+".png";
-		facebooksrc = "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.3/img/facebook_info_ios_img_en.jpg";
+		facebooksrc = "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.4/img/facebook_info_ios_img_en.jpg";
 	}else{
 	    text2 = lang[currentLang]["FACEBOOK_INAPP_INFO_TEXT2"]
-		facebooksrc = "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.3/img/facebook_info_and_img_"+currentLang.toLowerCase()+".jpg";
+		facebooksrc = "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.4/img/facebook_info_and_img_"+currentLang.toLowerCase()+".jpg";
 	}
 	list.innerHTML = `
 	  <div class="perm-top-box">
@@ -386,9 +386,9 @@ function initPermissionScreenForFacebook() {
 
   const browserName = isIOS ? "Safari" : "Chrome";
 
-  const warningText = `${lang_BROWSER_ERR1} ` + `${lang_BROWSER_ERR2}` + browserName + `${lang_BROWSER_ERR3}`;
+  //const warningText = `${lang_BROWSER_ERR1} ` + `${lang_BROWSER_ERR2}` + browserName + `${lang_BROWSER_ERR3}`;
 
-  document.getElementById("inappWarning").innerHTML = warningText;
+  //document.getElementById("inappWarning").innerHTML = warningText;
 
   if (isInAppBrowser()) {
     if (currentLang === "pt" || currentLang === "es" || currentLang === "en") {
@@ -402,7 +402,7 @@ function initPermissionScreenForFacebook() {
 
     document.getElementById("inappWarning").style.display = "none";
   }
-
+  document.getElementById("inappWarning").style.display = "none";
   const toggle = document.getElementById("arNoticeToggle");
   const arNoticeList = document.getElementById("arNoticeList");
   const arrow = document.getElementById("arArrowIcon");
