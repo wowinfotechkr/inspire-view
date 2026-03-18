@@ -284,6 +284,8 @@ var lang = {
     TRY_GAME_INFO_MAIN_TITLE: "이제 카메라를 켜고<br>지금 당신의 주위에서, 새로운 AR 세상을 만나보세요.",
     TRY_GAME_INFO_SUB_TITLE: 'AR 체험을 위해 아래 권한을 허용해 주세요.<span style="font-weight:bold;">앱 설치·로그인 없이 바로 이용할 수 있어요.</span>',
     PERM_TITLE_NEW: "AR 세상을 열기 위한 준비",
+    REFRESH_BTN_TEXT: "새로고침",
+    REFRESH_INFO_TEXT: "권한 설정을 마친 후, 새로고침을 눌러주세요.",
   },
   en: {
     AR_INDEX_TITLE: "Rewards Promotion - AR",
@@ -556,6 +558,8 @@ var lang = {
 	TRY_GAME_INFO_MAIN_TITLE: "Now, turn on your camera and meet a new AR world right where you are.",
 	TRY_GAME_INFO_SUB_TITLE: 'Please allow the permissions below for the AR experience. <span style="font-weight:bold;">without installing the app or logging in.</span>',
 	PERM_TITLE_NEW: "Preparing to open the AR world",
+	REFRESH_BTN_TEXT: "Refresh",
+	REFRESH_INFO_TEXT: "After completing the permission settings, please tap Refresh.",
   },
   ja: {
     AR_INDEX_TITLE: "リワードプロモーション - AR",
@@ -825,9 +829,11 @@ var lang = {
     GUIDE_ARROW_TEXT2: "次のトークンがあります！",
 	TRY_GAME_DIV1_TEXT1: "まずは通りで<br>トークンを集めてみましょう。",
 	TRY_GAME_DIV1_TEXT2: "次はレストランで<br>トークンを集めてみましょう。",
-	TRY_GAME_INFO_MAIN_TITLE: "さあ、カメラ를 起動して 今あなたの周りで、新しいARの世界に出会いましょう。",
+	TRY_GAME_INFO_MAIN_TITLE: "さあ、カメラを起動して 起動して 今あなたの周りで、新しいARの世界に出会いましょう。",
 	TRY_GAME_INFO_SUB_TITLE: 'AR体験のために以下の権限を許可してください。<span style="font-weight:bold;">アプリのインストールやログインなしで</span>',
 	PERM_TITLE_NEW: "ARの世界を開くための準備",
+	REFRESH_BTN_TEXT: "更新",
+	REFRESH_INFO_TEXT: "権限の設定を完了した後、「更新」をタップしてください。",
   },
   th: {
     AR_INDEX_TITLE: "โปรโมชั่นรางวัล - AR",
@@ -1100,6 +1106,8 @@ var lang = {
 	TRY_GAME_INFO_MAIN_TITLE: "ตอนนี้ เปิดกล้องของคุณ แล้วมาสัมผัสโลก AR ใหม่ รอบตัวคุณได้เลย",
 	TRY_GAME_INFO_SUB_TITLE: 'โปรดอนุญาตสิทธิ์ด้านล่างเพื่อสัมผัสประสบการณ์ AR <span style="font-weight:bold;">ได้ทันทีโดยไม่ต้องติดตั้งแอปหรือล็อกอิน</span>',
 	PERM_TITLE_NEW: "เตรียมความพร้อมเพื่อเปิดโลก AR",
+	REFRESH_BTN_TEXT: "รีเฟรッシュ",
+	REFRESH_INFO_TEXT: "หลังจากตั้งค่าการอนุญาตเสร็จហើយ โปรดกดรีเฟรッシュ",
   },
   es: {
     AR_INDEX_TITLE: "Promoción de recompensas - AR",
@@ -1372,6 +1380,8 @@ var lang = {
 	TRY_GAME_INFO_MAIN_TITLE: "Ahora, enciende tu cámara y descubre un nuevo mundo de RA a tu alrededor.",
 	TRY_GAME_INFO_SUB_TITLE: 'Por favor, concede los siguientes permisos para la experiencia de RA. <span style="font-weight:bold;">sin instalar la app ni iniciar sesión</span>',
 	PERM_TITLE_NEW: "Preparándonos para abrir el mundo de RA",
+	REFRESH_BTN_TEXT: "Actualizar",
+	REFRESH_INFO_TEXT: "Tras completar los ajustes de permisos, pulsa Actualizar.",
   },
   vi: {
     AR_INDEX_TITLE: "Khuyến mãi phần thưởng - AR",
@@ -1644,6 +1654,8 @@ var lang = {
 	TRY_GAME_INFO_MAIN_TITLE: "Bây giờ, hãy bật camera và khám phá thế giới AR mới ngay xung quanh bạn.",
 	TRY_GAME_INFO_SUB_TITLE: 'Vui lòng cấp các quyền bên dưới để trải nghiệm AR. <span style="font-weight:bold;">ngay lập tức mà không cần cài đặt ứng dụng hay đăng nhập</span>',
 	PERM_TITLE_NEW: "Chuẩn bị để mở ra thế giới AR",
+	REFRESH_BTN_TEXT: "Làm mới",
+	REFRESH_INFO_TEXT: "Sau khi hoàn tất cài đặt quyền, vui lòng nhấn Làm mới.",
   },
   pt: {
     AR_INDEX_TITLE: "Promoção de Recompensas - RA",
@@ -1916,6 +1928,8 @@ var lang = {
 	TRY_GAME_INFO_MAIN_TITLE: "Agora, ligue sua câmera e encontre um novo mundo de RA ao seu redor.",
 	TRY_GAME_INFO_SUB_TITLE: 'Por favor, permita as permissões abaixo para a experiência de RA. <span style="font-weight:bold;">sem instalar o aplicativo ou fazer login</span>',
 	PERM_TITLE_NEW: "Preparando para abrir o mundo de RA",
+	REFRESH_BTN_TEXT: "Atualizar",
+	REFRESH_INFO_TEXT: "Após concluir as configurações de permissão, clique em Atualizar.",
   },
   km: {
     AR_INDEX_TITLE: "ប្រូម៉ូសិនរង្វាន់ - AR",
@@ -2201,5 +2215,7 @@ var lang = {
 	TRY_GAME_INFO_MAIN_TITLE: "ឥឡូវនេះ បើកកាមេរ៉ារបស់អ្នក ហើយជួបជាមួយពិភព AR ថ្មី នៅជុំវិញខ្លួនអ្នក។",
 	TRY_GAME_INFO_SUB_TITLE: 'សូមអនុញ្ញាតសិទ្ធិខាងក្រោមសម្រាប់បទពិសោធន៍ AR។ <span style="font-weight:bold;">បានភ្លាមៗដោយមិនចាំបាច់ដំឡើងកម្មវិធី ឬចូលគណនី</span>',
 	PERM_TITLE_NEW: "ការត្រៀមលក្ខណៈដើម្បីបើកពិភព AR",
+	REFRESH_BTN_TEXT: "Refresh",
+	REFRESH_INFO_TEXT: "បន្ទាប់ពីកំណត់ការអនុញ្ញាតរួចរាល់ សូមចុច Refresh។",
   },
 };

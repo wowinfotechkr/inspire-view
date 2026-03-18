@@ -246,9 +246,9 @@ function initPermissionScreen() {
   const currentLang = getLang();
   const items = [];
   if (isIOS) {
-    items.push({ id: "markMotion", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.1/img/motion.png", txt: lang[currentLang]["EXP_INFO_MOTION_TITLE"] });
+    items.push({ id: "markMotion", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.3/img/motion.png", txt: lang[currentLang]["EXP_INFO_MOTION_TITLE"] });
   }
-  items.push({ id: "markCamera", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.1/img/camera.png", txt: lang[currentLang]["EXP_INFO_CAMERA_TITLE"] });
+  items.push({ id: "markCamera", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.3/img/camera.png", txt: lang[currentLang]["EXP_INFO_CAMERA_TITLE"] });
 
   items.forEach((item) => {
     const li = document.createElement("li");
@@ -364,6 +364,11 @@ function openAuthModalOverlay() {
   document.getElementById("authModal").classList.remove("hidden");
 }
 
+function refreshBtnClick() {
+  saveUserLog("TRY - 새로고침");
+  location.reload();
+}
+
 function closeAuthModalOverlay() {
   document.getElementById("authModal").classList.add("hidden");
 }
@@ -417,8 +422,11 @@ async function updatePermissionUI() {
 function resetPermissionBottomUI() {
   const notice = document.getElementById("permNotice");
   const nextBtn = document.getElementById("btn-next");
+  const refreshBtn = document.getElementById("refreshNotice");
 
   if (notice) notice.classList.add("hidden"); // 안내창 숨김
+  if (refreshBtn) refreshBtn.classList.add("hidden"); // 안내창 숨김
+  
   if (nextBtn) nextBtn.style.display = ""; // 다음 버튼 다시 표시
 }
 async function initPermissionFlow() {
@@ -442,10 +450,16 @@ async function initPermissionFlow() {
     }, 700);
     loadEvent(true);
   } else {
-    showScreen("tryGameScreen1");
-    initTryGameScreen1();
-	startTryGameTokenIntro();
-    //showScreen("permissionScreen");
+	  if(checkParmasFacebook){
+	      fMaxProgress = 100;
+	      showScreen("tryGameScreen2");
+	      showOverlay("permissionScreen");
+	  }else{
+	  showScreen("tryGameScreen1");
+	    initTryGameScreen1();
+		startTryGameTokenIntro();
+	    //showScreen("permissionScreen");
+	  }
   }
 }
 
@@ -687,6 +701,8 @@ function hideBottomNotice() {
   if (nextBtn) nextBtn.style.display = "";
   const guideDiv = document.getElementById("guideInfoBtnDiv");
   if (guideDiv) guideDiv.classList.remove("hidden");
+  const refreshDiv = document.getElementById("refreshBtnDiv");
+  if (refreshDiv) refreshDiv.classList.remove("hidden");
 }
 
 async function loadEvent(isReadyEnd) {
@@ -1438,7 +1454,7 @@ async function startPortalLottie() {
     renderer: "svg",
     loop: false,
     autoplay: true,
-    path: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.1/lottie/portal_ntokozo.json",
+    path: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.3/lottie/portal_ntokozo.json",
   });
 }
 
@@ -1861,7 +1877,7 @@ function buildImgListForMeals(imgs, mealCount) {
 }
 
 async function getMealsForSpawn() {
-  const imgs = ["https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.1/img/token/coin_buddha_statue.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.1/img/token/coin_gold_bar.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.1/img/token/coin_money_1.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.1/img/token/jewel_diamond.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.1/img/token/people_girl_1.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.1/img/token/people_girl_2.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.1/img/token/people_girl_3.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.1/img/token/people_girl_4.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.1/img/token/people_girl_5.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.1/img/token/people_man_1.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.1/img/token/people_man_2.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.1/img/token/people_man_3.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.1/img/token/cosmetics_cream.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.1/img/token/cosmetics_lipstick.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.1/img/token/item_flower.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.1/img/token/car_1.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.1/img/token/item_skeleton.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.1/img/token/drink_americano.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.1/img/token/drink_beer.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.1/img/token/drink_chamisul.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.1/img/token/drink_champagne.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.1/img/token/drink_cocktail_1.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.1/img/token/drink_cocktail_2.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.1/img/token/drink_whiskey.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.1/img/token/drink_wine.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.1/img/token/food_hotdog.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.1/img/token/food_kimbap.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.1/img/token/food_macaron.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.1/img/token/JP_sushi.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.1/img/token/food_watermelon.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.1/img/token/ID_barong_mask.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.1/img/token/ID_garuda.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.1/img/token/IN_elephant.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.1/img/token/IN_lionstatue.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.1/img/token/TH_buddha_statue.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.1/img/token/TH_dragon_sculpture.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.1/img/token/US_route66.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.1/img/token/US_statue_of_liberty.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.1/img/token/VN_conicalhat.png"];
+  const imgs = ["https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.3/img/token/coin_buddha_statue.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.3/img/token/coin_gold_bar.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.3/img/token/coin_money_1.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.3/img/token/jewel_diamond.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.3/img/token/people_girl_1.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.3/img/token/people_girl_2.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.3/img/token/people_girl_3.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.3/img/token/people_girl_4.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.3/img/token/people_girl_5.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.3/img/token/people_man_1.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.3/img/token/people_man_2.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.3/img/token/people_man_3.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.3/img/token/cosmetics_cream.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.3/img/token/cosmetics_lipstick.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.3/img/token/item_flower.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.3/img/token/car_1.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.3/img/token/item_skeleton.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.3/img/token/drink_americano.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.3/img/token/drink_beer.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.3/img/token/drink_chamisul.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.3/img/token/drink_champagne.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.3/img/token/drink_cocktail_1.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.3/img/token/drink_cocktail_2.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.3/img/token/drink_whiskey.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.3/img/token/drink_wine.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.3/img/token/food_hotdog.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.3/img/token/food_kimbap.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.3/img/token/food_macaron.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.3/img/token/JP_sushi.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.3/img/token/food_watermelon.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.3/img/token/ID_barong_mask.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.3/img/token/ID_garuda.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.3/img/token/IN_elephant.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.3/img/token/IN_lionstatue.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.3/img/token/TH_buddha_statue.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.3/img/token/TH_dragon_sculpture.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.3/img/token/US_route66.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.3/img/token/US_statue_of_liberty.png", "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.3/img/token/VN_conicalhat.png"];
 
   if (!USE_MOCK_MEAL) {
     const mealCount = WANT_TOKEN_COUNT;
@@ -2254,8 +2270,8 @@ function preloadAudio(id) {
 }
 
 async function preloadLottie() {
-  giftJson = await fetch("https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.1/lottie/gift_box.json").then(r => r.json());
-  fireworksJson = await fetch("https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.1/lottie/fireworks.json").then(r => r.json());
+  giftJson = await fetch("https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.3/lottie/gift_box.json").then(r => r.json());
+  fireworksJson = await fetch("https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.3/lottie/fireworks.json").then(r => r.json());
 }
 
 function _sleep(ms) {

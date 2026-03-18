@@ -717,11 +717,11 @@ function initPermissionScreen() {
 
   const currentLang = getLang();
   const items = [
-    { id: "markGeo", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.1/img/location.png", txt: lang[currentLang]["PERM_ITEM_LOCATION"] },
-    { id: "markCamera", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.1/img/camera.png", txt: lang[currentLang]["PERM_ITEM_CAMERA"] },
+    { id: "markGeo", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.3/img/location.png", txt: lang[currentLang]["PERM_ITEM_LOCATION"] },
+    { id: "markCamera", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.3/img/camera.png", txt: lang[currentLang]["PERM_ITEM_CAMERA"] },
   ];
   if (isIOS) {
-    items.push({ id: "markMotion", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.1/img/motion.png", txt: lang[currentLang]["PERM_ITEM_MOTION"] });
+    items.push({ id: "markMotion", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.3/img/motion.png", txt: lang[currentLang]["PERM_ITEM_MOTION"] });
   }
 
   items.forEach((item) => {
@@ -1078,6 +1078,8 @@ function hideBottomNotice() {
   if (nextBtn) nextBtn.style.display = "";
   const guideDiv = document.getElementById("guideInfoBtnDiv");
   if (guideDiv) guideDiv.classList.remove("hidden");
+  const refreshDiv = document.getElementById("refreshBtnDiv");
+  if (refreshDiv) refreshDiv.classList.remove("hidden");
 }
 
 function requestGeolocation_old() {
@@ -2708,7 +2710,7 @@ function startPortalLottie() {
     renderer: "svg",
     loop: false, // 🔁 필요에 따라 true/false
     autoplay: true, // 페이지 진입 시 자동재생
-    path: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.1/lottie/portal_ntokozo.json",
+    path: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.3/lottie/portal_ntokozo.json",
   });
 }
 
@@ -4453,6 +4455,11 @@ function preloadAudio(id) {
 }
 
 async function preloadLottie() {
-  giftJson = await fetch("https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.1/lottie/gift_box.json").then(r => r.json());
-  fireworksJson = await fetch("https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.1/lottie/fireworks.json").then(r => r.json());
+  giftJson = await fetch("https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.3/lottie/gift_box.json").then(r => r.json());
+  fireworksJson = await fetch("https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.3/lottie/fireworks.json").then(r => r.json());
+}
+
+function refreshBtnClick() {
+  saveUserLog("PLAY - 새로고침");
+  location.reload();
 }
