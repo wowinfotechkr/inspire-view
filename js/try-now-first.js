@@ -60,6 +60,7 @@ function initTryGameScreen1() {
   tokenDiv.addEventListener("click", function (e) {
     e.preventDefault();
     collectTryGameToken();
+    goStoreBtn=2;
   });
 }
 
@@ -150,6 +151,7 @@ function initTryGameScreen2() {
     function (e) {
       e.preventDefault();
       collectTryGameToken2();
+      goStoreBtn=3;
     },
     { passive: false }
   );
@@ -183,7 +185,6 @@ function collectTryGameToken2() {
   const tokenDiv = document.getElementById("tryGameImgDiv2");
   const guideDiv = document.getElementById("tryGamediv2");
   const sound = document.getElementById("collect-sound");
-  document.body.appendChild(document.getElementById('GameOverlayBtn2'));
   const storeBtnDiv = document.getElementById("GameOverlayBtn2");
 
   if (!tokenDiv || !guideDiv) return;
@@ -205,7 +206,7 @@ function collectTryGameToken2() {
     function () {
       tokenDiv.style.display = "none";
       guideDiv.style.display = "none";
-      storeBtnDiv.style.zIndex = "20001";
+      //storeBtnDiv.style.zIndex = "20001";
         saveUserLog("TRY - 체험 2페이지 토큰수집(페이스북)");
       onTryGameToken2Collected();
     },
@@ -367,10 +368,10 @@ function initPermissionScreenForFacebook() {
 	if(isIOS){
 	    text2 = lang[currentLang]["FACEBOOK_INAPP_INFO_TEXT2_ios"]
 		//facebooksrc = "/TRY-NOW/img/facebook_info_ios_img_"+currentLang.toLowerCase()+".png";
-		facebooksrc = "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.7/img/facebook_info_ios_img_en.jpg";
+		facebooksrc = "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.8/img/facebook_info_ios_img_en.jpg";
 	}else{
 	    text2 = lang[currentLang]["FACEBOOK_INAPP_INFO_TEXT2"]
-		facebooksrc = "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.7/img/facebook_info_and_img_"+currentLang.toLowerCase()+".jpg";
+		facebooksrc = "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.8/img/facebook_info_and_img_"+currentLang.toLowerCase()+".jpg";
 	}
 	list.innerHTML = `
 	  <div class="perm-top-box">
