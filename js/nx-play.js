@@ -717,11 +717,11 @@ function initPermissionScreen() {
 
   const currentLang = getLang();
   const items = [
-    { id: "markGeo", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.5/img/location.png", txt: lang[currentLang]["PERM_ITEM_LOCATION"] },
-    { id: "markCamera", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.5/img/camera.png", txt: lang[currentLang]["PERM_ITEM_CAMERA"] },
+    { id: "markGeo", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.9/img/location.png", txt: lang[currentLang]["PERM_ITEM_LOCATION"] },
+    { id: "markCamera", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.9/img/camera.png", txt: lang[currentLang]["PERM_ITEM_CAMERA"] },
   ];
   if (isIOS) {
-    items.push({ id: "markMotion", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.5/img/motion.png", txt: lang[currentLang]["PERM_ITEM_MOTION"] });
+    items.push({ id: "markMotion", img: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.9/img/motion.png", txt: lang[currentLang]["PERM_ITEM_MOTION"] });
   }
 
   items.forEach((item) => {
@@ -1234,6 +1234,8 @@ async function loadEvent(isReadyEnd) {
   document.head.appendChild(script);
 
   try {
+  console.log("TEST260429!")
+  console.log(arEventInfo)
     if (arEventInfo && arEventInfo.return_cd == "00000000") {
       //startPortalLottie();
       const cpnTitleEl = arEventInfo.cpnTitle || lang_COUPON;
@@ -2710,7 +2712,7 @@ function startPortalLottie() {
     renderer: "svg",
     loop: false, // 🔁 필요에 따라 true/false
     autoplay: true, // 페이지 진입 시 자동재생
-    path: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.5/lottie/portal_ntokozo.json",
+    path: "https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.9/lottie/portal_ntokozo.json",
   });
 }
 
@@ -3772,7 +3774,19 @@ function goAuth(provider) {
   };
   console.log(stateObj);
   const state = btoa(unescape(encodeURIComponent(JSON.stringify(stateObj))));
-  location.href = `/oauth/${provider}/authorize.do?state=${encodeURIComponent(state)}`;
+  const authUrl = `/oauth/${provider}/authorize.do?state=${encodeURIComponent(state)}`;
+  if (provider === "line") {
+    document.querySelectorAll("video").forEach((video) => {
+      if (video.srcObject) {
+        video.srcObject.getTracks().forEach((t) => t.stop());
+        video.srcObject = null;
+      }
+    });
+    window.open(authUrl, "_blank");
+    setTimeout(() => location.reload(), 1500);
+  } else {
+    location.href = authUrl;
+  }
 }
 
 function addLogText(logText) {
@@ -3979,6 +3993,14 @@ function setInfoMapNew(address, eventInfoDateto, eventInfoDatefrom, eventInfoAmt
   const arModalInfoToken = document.getElementById("arModalInfoToken");
   const arModalInfoAmt = document.getElementById("arModalInfoAmt");
   const arModalInfoCouponInfo = document.getElementById("arModalInfoCouponInfo");
+
+  if (window.location.hostname === "vive.beyondt.net") {
+    const storeName = arEventInfo && arEventInfo.storeName;
+    if (storeName) {
+      document.getElementById("storeNameInfo").textContent = storeName;
+      document.getElementById("arModalInfoStoreName").classList.remove("hidden");
+    }
+  }
 
   // 기존의 eventSdate, eventEdate, address 변수를 그대로 쓴다고 가정
   if (typeof eventInfoDateto !== "undefined" && typeof eventInfoDatefrom !== "undefined") {
@@ -4456,8 +4478,8 @@ function preloadAudio(id) {
 }
 
 async function preloadLottie() {
-  giftJson = await fetch("https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.5/lottie/gift_box.json").then(r => r.json());
-  fireworksJson = await fetch("https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.5/lottie/fireworks.json").then(r => r.json());
+  giftJson = await fetch("https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.9/lottie/gift_box.json").then(r => r.json());
+  fireworksJson = await fetch("https://cdn.jsdelivr.net/gh/wowinfotechkr/inspire-view@v1.3.9/lottie/fireworks.json").then(r => r.json());
 }
 
 function refreshBtnClick() {
