@@ -1937,7 +1937,7 @@ body.no-scroll {
   background-repeat: no-repeat;
   background-position: center;
   background-size: 70px 70px;
-  background-image: url("/img/info-icon.svg");
+  background-image: url("../img/info-icon.svg");
   pointer-events: none;
   z-index: 2;
 }
